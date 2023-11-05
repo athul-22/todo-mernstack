@@ -7,6 +7,7 @@ import Auth from "./pages/auth";
 import PrivateRoutes from "./components/privateRoutes";
 import NotFound from "./pages/NotFound";
 import Login from './components/auth/Login'
+import Register from './components/auth/Register'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/*" element={<NotFound />} />
         {/* <Route path="/auth" element={<Auth />} /> */}
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   );

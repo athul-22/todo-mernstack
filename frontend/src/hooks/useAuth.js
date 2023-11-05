@@ -6,7 +6,7 @@ export default () => {
 
   const verifyAuth = async () => {
     try {
-      const res = await axios.get('/api/auth/is_logged_in');
+      const res = await axios.get('/api/auth/is_loged_in');
       return res.data;
     } catch (err) {
       console.log(err);

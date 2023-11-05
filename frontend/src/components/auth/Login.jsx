@@ -10,17 +10,29 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import fingerprint from './fingerprint.gif'
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = () => {
-    // event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
+
+    const navigate = useNavigate();
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    try{
+        await axios.post('/api/auth/login',{
+            email,
+            password
+        })
+        navigate('/')
+    }catch(error){
+        console.log(error);
+    }
   };
 
   return (

@@ -3,7 +3,6 @@ import { Toaster } from "react-hot-toast";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import EditProfile from "./pages/editProfile";
-import Auth from "./pages/auth";
 import PrivateRoutes from "./components/privateRoutes";
 import NotFound from "./pages/NotFound";
 import Login from './components/auth/Login'

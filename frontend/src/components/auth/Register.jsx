@@ -5,6 +5,8 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import toast from 'react-hot-toast';
+import axios from 'axios'
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -15,13 +17,22 @@ import fingerprint from './fingerprint.gif'
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = () => {
-    // event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
+
+  const register = async(e) => {
+    e.preventDefault();
+    const user = {
+        name: e.target.name.value,
+        email: e.target.email.value,
+        password: e.target.password.value
+    };
+
+    try{
+        await axios.post('/api/auth/register',user);
+        toast.success('Account created successfully');
+    }catch(error){
+        console.log(error);
+        toast.error('Something went wrong')
+    }
   };
 
   return (
@@ -67,11 +78,11 @@ export default function SignIn() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={register}
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="given-name"
                     name="firstName"
@@ -90,6 +101,17 @@ export default function SignIn() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
+                  />
+                </Grid> */}
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="name"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    autoFocus
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -118,6 +140,7 @@ export default function SignIn() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                onSubmit={register}
                 sx={{
                   mt: 3,
                   mb: 2,

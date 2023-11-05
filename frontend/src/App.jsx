@@ -4,8 +4,9 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import EditProfile from "./pages/editProfile";
 import Auth from "./pages/auth";
-import privateRoutes from "./components/privateRoutes";
+import PrivateRoutes from "./components/privateRoutes";
 import NotFound from "./pages/NotFound";
+import Login from './components/auth/Login'
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
       {/* ROUTES START */}
       {/* PRIVATE ROUTES */}
       <Routes>
-        <Route element={privateRoutes}>
+        <Route element={<PrivateRoutes/>}>
           <Route path="/" element={<Home />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           
@@ -26,7 +27,8 @@ function App() {
 
         {/* PUBLICH ROUTES */}
         <Route path="/*" element={<NotFound />} />
-        <Route path="/auth" element={<Auth />} />
+        {/* <Route path="/auth" element={<Auth />} /> */}
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );

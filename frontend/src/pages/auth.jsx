@@ -1,9 +1,17 @@
+import Layout from '../components/Layout'
+import Login from '../components/auth/Login'
+import Register from '../components/auth/Register'
 
-
-function auth() {
+function Auth() {
   return (
-    <div>auth</div>
+    <Layout>
+        <div>
+            <Login/>
+            <Register/>
+        </div>
+    </Layout>
+
   )
 }
 
-export default auth
+export default Auth

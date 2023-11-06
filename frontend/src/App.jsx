@@ -13,7 +13,7 @@ function App() {
     <>
       <Toaster
         position="top-right"
-        toastOptions={{ style: { fontSize: "1.5rem" } }}
+        toastOptions={{ style: { fontSize: "1rem" } }}
       ></Toaster>
       
       {/* ROUTES START */}

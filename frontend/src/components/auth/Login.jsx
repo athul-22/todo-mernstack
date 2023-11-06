@@ -29,7 +29,8 @@ export default function SignIn() {
             email,
             password
         })
-        navigate('/')
+        navigate('/');
+        localStorage.setItem("username",email)
     }catch(error){
         console.log(error);
     }

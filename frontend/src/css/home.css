@@ -1,0 +1,23 @@
+.top-greetings{
+    font-size: 35px;
+    font-weight: bold;
+
+}
+
+.main_outer{
+    margin-left: 100px;
+    margin-top: 70px;
+}
+
+.top_today{
+    font-size: 25px;
+    font-family: sans-serif;
+    color: #838383;
+}
+
+.top-right{ 
+    display: inline-flex;
+    float: right;
+    margin-right: 200px;
+    margin-top: -70px;
+}

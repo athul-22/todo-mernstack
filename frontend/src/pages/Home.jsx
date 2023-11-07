@@ -1,11 +1,11 @@
 import * as React from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 // import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 // import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 // import Container from '@mui/material/Container';
@@ -27,8 +27,8 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import "../css/home.css";
 import Typography from "@mui/material/Typography";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import axios from 'axios';
+import man from '../images/man.png'
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -103,13 +103,29 @@ export default function Home() {
   //⭐️ STATES
   const [open, setOpen] = React.useState(false);
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
+  const [user,setUser] = useState(null)
 
+  //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
     setOpen(true);
   };
   const handleClosesettings = () => {
     setOpen(false);
   };
+
+  //⭐️ AXIOS GET USE FUNCTION
+
+  const getUser = async()=> {
+    try{
+      const {data} = await axios.get('/api/users/profile');
+      setUser(data)
+      console.log(data)
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+
 
   //⭐️ DRAWER MENU
   // const toggleDrawer = () => {
@@ -119,13 +135,20 @@ export default function Home() {
   //⭐️ WELCOME MODEL
   //⭐️ USERNAME SET
   //⭐️ TODAYS DATE AND DAY
+
   useEffect(() => {
+    //⭐️ GET USE INFORMATION FUNCTION
+    getUser();
+
+    //⭐️ WELCOME POPUP CALLING AND LOCALSTORAGE VALUE SETTING FUNCTION
     const localStorageValue = localStorage.getItem("welcomeOpen");
     if (!localStorageValue || localStorageValue === "false") {
       setWelcomeOpen(true);
       // localStorage.setItem("welcomeOpen", "true");
     }
+
   }, []);
+
 
   const handleClose = () => {
     setWelcomeOpen(false);
@@ -153,6 +176,10 @@ export default function Home() {
       topTodayElement.textContent = todayDate;
     }
   };
+
+  if(!user){
+    return null;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -291,7 +318,7 @@ export default function Home() {
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-        Settings
+       {/* Profile */}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -305,26 +332,19 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-            auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-            cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-            dui. Donec ullamcorper nulla non metus auctor fringilla.
-          </Typography>
+        <DialogContent  style={{height:'300px',width:'600px'}}>
+          <div style={{display:'flex',justifyContent:'center'}}>
+          <img src={man}   height="100px" width="100px"/>
+          </div>
+          <h2 style={{textAlign:'center',}}>{user.name}</h2>
+          <h3 style={{textAlign:'center',marginTop:'-20px',color:'grey'}}>{user.email}</h3>
+          <div style={{display:'flex',justifyContent:'center'}}>
+          <button style={{cursor:'pointer', fontSize:'20px',borderRadius:'5px',boxShadow: '#1890ff 0px 4px 16px 0px',backgroundColor:'#1890ff',color:'white',border:'none',height:'50px',width:'150px'}}>Edit Profile</button>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClosesettings}>
-            Save changes
+            Save Profile
           </Button>
         </DialogActions>
       </BootstrapDialogSettings>

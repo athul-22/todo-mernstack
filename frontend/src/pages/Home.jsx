@@ -1,11 +1,11 @@
 import * as React from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 // import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 // import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 // import Container from '@mui/material/Container';
@@ -19,7 +19,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import WelcomeGif from "../images/welcome.gif";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"; // import Chart from './Chart';
 // import Deposits from './Deposits';
@@ -27,7 +27,11 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import "../css/home.css";
 import Typography from "@mui/material/Typography";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import axios from "axios";
+import man from "../images/man.png";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import TaskList from "../components/TaskList";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -99,15 +103,30 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const defaultTheme = createTheme();
 
 export default function Home() {
+  const navigate = useNavigate();
   //⭐️ STATES
   const [open, setOpen] = React.useState(false);
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
+  const [user, setUser] = useState(null);
 
+  //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
     setOpen(true);
   };
   const handleClosesettings = () => {
     setOpen(false);
+  };
+
+  //⭐️ AXIOS GET USE FUNCTION
+
+  const getUser = async () => {
+    try {
+      const { data } = await axios.get("/api/users/profile");
+      setUser(data);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //⭐️ DRAWER MENU
@@ -118,7 +137,12 @@ export default function Home() {
   //⭐️ WELCOME MODEL
   //⭐️ USERNAME SET
   //⭐️ TODAYS DATE AND DAY
+
   useEffect(() => {
+    //⭐️ GET USE INFORMATION FUNCTION
+    getUser();
+
+    //⭐️ WELCOME POPUP CALLING AND LOCALSTORAGE VALUE SETTING FUNCTION
     const localStorageValue = localStorage.getItem("welcomeOpen");
     if (!localStorageValue || localStorageValue === "false") {
       setWelcomeOpen(true);
@@ -153,6 +177,21 @@ export default function Home() {
     }
   };
 
+  if (!user) {
+    return null;
+  }
+
+  const handleLogout = async () => {
+    try {
+      await axios.get("/api/auth/logout");
+      setUser(null);
+      toast.success("Logged outt successfully");
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -162,7 +201,7 @@ export default function Home() {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "#f5f5f5" : "white",
+              theme.palette.mode === "light" ? "#f6f9fb" : "white",
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
@@ -176,7 +215,7 @@ export default function Home() {
             <div className="top_today"></div>
 
             <div className="top-right">
-            {/* <IconButton color="inherit" style={{ backgroundColor: "white",
+              {/* <IconButton color="inherit" style={{ backgroundColor: "white",
                     height: "50px",
                     width: "200px",
                     borderRadius: "5px",
@@ -194,16 +233,17 @@ export default function Home() {
               <IconButton color="inherit">
                 <Badge
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "#1890ff",
                     height: "50px",
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",
                     alignItems: "center",
+                    boxShadow: "#1890ff 0px 4px 16px 0px",
                   }}
                 >
                   <NotificationsNoneOutlinedIcon
-                    style={{ color: "black", fontSize: "30px" }}
+                    style={{ color: "white", fontSize: "30px" }}
                   />
                 </Badge>
               </IconButton>
@@ -211,23 +251,25 @@ export default function Home() {
               <IconButton color="inherit" onClick={handleClickOpensettings}>
                 <Badge
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "#1890ff",
                     height: "50px",
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",
                     alignItems: "center",
+                    boxShadow: "#1890ff 0px 4px 16px 0px",
                   }}
                 >
                   <DragHandleIcon
-                    style={{ color: "black", fontSize: "35px" }}
+                    style={{ color: "white", fontSize: "35px" }}
                   />
                 </Badge>
               </IconButton>
             </div>
           </div>
+            <TaskList />
 
-          <Toolbar />
+          {/* <Toolbar /> */}
         </Box>
       </Box>
 
@@ -272,7 +314,7 @@ export default function Home() {
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClosesettings}>
-            Save changes
+            Continue
           </Button>
         </DialogActions>
       </BootstrapDialog>
@@ -284,7 +326,7 @@ export default function Home() {
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+          {/* Profile */}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -293,32 +335,63 @@ export default function Home() {
             position: "absolute",
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: (theme) => theme.palette.grey[10],
           }}
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-            auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-            cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-            dui. Donec ullamcorper nulla non metus auctor fringilla.
-          </Typography>
+        <DialogContent style={{ height: "auto", width: "600px" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <img src={man} height="100px" width="100px" />
+          </div>
+          <h2 style={{ textAlign: "center" }}>{user.name}</h2>
+          <h3
+            style={{ textAlign: "center", marginTop: "-25px", color: "grey" }}
+          >
+            {user.email}
+          </h3>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                borderRadius: "5px",
+                boxShadow: "#1890ff 0px 4px 16px 0px",
+                backgroundColor: "#1890ff",
+                color: "white",
+                border: "none",
+                height: "40px",
+                width: "130px",
+              }}
+            >
+              Edit Profile
+            </button>
+          </div>
+          <br />
+
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button
+              onClick={handleLogout}
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                borderRadius: "5px",
+                boxShadow: "#f96970 0px 4px 16px 0px",
+                border: "2px solid #f96970",
+                color: "white",
+                backgroundColor: "#f96970",
+                height: "40px",
+                width: "130px",
+              }}
+            >
+              Logout
+            </button>
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClosesettings}>
-            Save changes
-          </Button>
+          {/* <Button autoFocus onClick={handleClosesettings}>
+            Save Profile
+          </Button> */}
         </DialogActions>
       </BootstrapDialogSettings>
     </ThemeProvider>

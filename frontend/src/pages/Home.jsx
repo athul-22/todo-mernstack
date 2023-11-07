@@ -29,6 +29,7 @@ import Typography from "@mui/material/Typography";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
+
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -162,7 +163,7 @@ export default function Home() {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "#f5f5f5" : "white",
+              theme.palette.mode === "light" ? "#f6f9fb" : "white",
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
@@ -194,16 +195,17 @@ export default function Home() {
               <IconButton color="inherit">
                 <Badge
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "#1890ff",
                     height: "50px",
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",
                     alignItems: "center",
+                    boxShadow: '#1890ff 0px 4px 16px 0px'
                   }}
                 >
                   <NotificationsNoneOutlinedIcon
-                    style={{ color: "black", fontSize: "30px" }}
+                    style={{ color: "white", fontSize: "30px" }}
                   />
                 </Badge>
               </IconButton>
@@ -211,23 +213,28 @@ export default function Home() {
               <IconButton color="inherit" onClick={handleClickOpensettings}>
                 <Badge
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "#1890ff",
                     height: "50px",
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",
                     alignItems: "center",
+                    boxShadow: '#1890ff 0px 4px 16px 0px'
+
                   }}
                 >
                   <DragHandleIcon
-                    style={{ color: "black", fontSize: "35px" }}
+                    style={{ color: "white", fontSize: "35px" }}
                   />
                 </Badge>
               </IconButton>
             </div>
           </div>
 
-          <Toolbar />
+          {/* <Toolbar /> */}
+
+
+
         </Box>
       </Box>
 
@@ -284,7 +291,7 @@ export default function Home() {
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+        Settings
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -293,7 +300,7 @@ export default function Home() {
             position: "absolute",
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: (theme) => theme.palette.grey[10],
           }}
         >
           <CloseIcon />

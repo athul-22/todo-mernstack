@@ -29,8 +29,9 @@ import Typography from "@mui/material/Typography";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import axios from "axios";
 import man from "../images/man.png";
-import {toast} from 'react-hot-toast'
-import {useNavigate} from 'react-router-dom';
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import TaskList from "../components/TaskList";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -102,7 +103,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const defaultTheme = createTheme();
 
 export default function Home() {
-
   const navigate = useNavigate();
   //⭐️ STATES
   const [open, setOpen] = React.useState(false);
@@ -181,17 +181,16 @@ export default function Home() {
     return null;
   }
 
-  const handleLogout =async () => {
-    try{
+  const handleLogout = async () => {
+    try {
       await axios.get("/api/auth/logout");
       setUser(null);
       toast.success("Logged outt successfully");
-      navigate('/login');
-    }
-    catch(err){
+      navigate("/login");
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -268,6 +267,7 @@ export default function Home() {
               </IconButton>
             </div>
           </div>
+            <TaskList />
 
           {/* <Toolbar /> */}
         </Box>
@@ -367,11 +367,11 @@ export default function Home() {
               Edit Profile
             </button>
           </div>
-<br/>
+          <br />
 
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <button 
-            onClick={handleLogout}
+            <button
+              onClick={handleLogout}
               style={{
                 cursor: "pointer",
                 fontSize: "17px",
@@ -379,12 +379,12 @@ export default function Home() {
                 boxShadow: "#f96970 0px 4px 16px 0px",
                 border: "2px solid #f96970",
                 color: "white",
-                backgroundColor:'#f96970',
+                backgroundColor: "#f96970",
                 height: "40px",
                 width: "130px",
               }}
             >
-             Logout
+              Logout
             </button>
           </div>
         </DialogContent>

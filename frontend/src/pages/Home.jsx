@@ -210,7 +210,7 @@ export default function Home() {
           {/* main contents start from here */}
           <div className="main_outer">
             <div className="top-greetings">
-              Welcome <span className="username"></span> 👋 !
+              Welcome <span className="username">{user.name}</span> 👋 !
             </div>
             <div className="top_today"></div>
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
 import "./TaskList.css";
+import BodyNoTask from '../images/boynotask.png'
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -23,9 +24,6 @@ function TaskList() {
 
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [sideContainerContent, setSideContainerContent] = useState(
-    "Your side container content goes here"
-  );
 
   const handleAddTask = () => {
     if (task) {
@@ -73,10 +71,36 @@ function TaskList() {
     //   </div>
     // </div>
 
-    <div id="taskmain">
+    <div id="taskmain" style={{overflowY:'hidden',}}>
       <div className="container">
         <div className="columns is-centered is-mobile">
-          
+    
+    <div className="">
+        {taskList.length > 0 ? (
+        <table>
+            <tbody>
+                {taskList.map(task=>{
+                    return(
+                        <tr key={task._id}>
+                            <td>{task.task}</td>
+                            <td>{task.createdAt}</td>
+                            <td><Button variant="contained" color="primary">Done</Button></td>
+                        </tr>
+                    )
+                })}
+            </tbody>
+        </table> 
+        ): 
+        <div>
+            <div style={{display:'flex',justifyContent:'center',marginTop:'-200px',marginBottom:'100px'}}>
+            <img src={BodyNoTask} height="300px" width="300px"/><br/>
+            
+        </div>
+        <p style={{textAlign:'center',fontSize:'20px',color:'grey'}}>No Taskes are found!</p>
+        </div>
+        }
+    </div>
+
           <input
             type="text"
             className="taskinput"

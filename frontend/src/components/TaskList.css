@@ -1,13 +1,11 @@
 html, body {
     width: 100%;
-  }
-  
-  body {
     
   }
-  
+
   #taskmain {
-    height: 100vh;
+    
+    height: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;

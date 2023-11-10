@@ -13,9 +13,8 @@ function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [addNewTask, setAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState("");
-  const [isCompleted, setIsCompleted] = useState(task.completed);
+  // const [isCompleted, setIsCompleted] = useState(task.completed);
   const [isLoading, setIsLoading] = useState(false);
-
 
   useEffect(() => {
     getTasks();
@@ -65,18 +64,19 @@ function TaskList() {
   //   }
   // };
 
-  const handleCheckboxClick = async () => {
-    try{
+  const handleCheckboxClick = async (task) => {
+    try {
       await axios.put(`/api/tasks/${task._id}`, {
-        completed: !isCompleted,
+        completed: !task.isCompleted,
       });
-      setIsCompleted(!isCompleted);
-      toast.success('Task updated successfully');
-  }catch(err) {
-    console.log(err);
-    toast.error("Somehing went wrong");
-  }
-}
+      toast.success("Task updated successfully");
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div id="taskmain" style={{ overflowY: "hidden" }}>
@@ -93,28 +93,30 @@ function TaskList() {
                           className="task-item"
                           style={{ display: "flex", paddingTop: "5px" }}
                         >
-                          <input
+                          {/* <input
                             className="task-checkbox"
                             type="checkbox"
                             checked={isCompleted}
                             onChange={handleCheckboxClick}
-                            onClick={handleCheckboxClick}
-                          />
+                            onClick={handleCheckboxClick(task.id)}
+                          /> */}
 
-                          {/* <div
-                            // onChange={handleCheckboxClick}
+                          <div
+                            onChange={() => handleCheckboxClick(task)}
                             role="checkbox"
                             aria-checked
                           >
                             <input
+                              className="task-checkbox"
                               type="checkbox"
-                              checked={isCompleted}
-                              onClick={handleCheckboxClick(task._id)}
+                              checked={task.isCompleted}
                               disabled={isLoading}
                               readOnly
                               tabIndex={-1}
+                            
                             />
-                          </div> */}
+                          </div>
+
                           <p
                             className="task-title"
                             style={{

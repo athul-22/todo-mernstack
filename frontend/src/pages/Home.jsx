@@ -32,6 +32,7 @@ import man from "../images/man.png";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import TaskList from "../components/TaskList";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -106,6 +107,7 @@ export default function Home() {
   const navigate = useNavigate();
   //⭐️ STATES
   const [open, setOpen] = React.useState(false);
+  const [addTaskOpen, setOsetAddTaskOpen] = React.useState(false);
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
   const [user, setUser] = useState(null);
 
@@ -114,6 +116,14 @@ export default function Home() {
     setOpen(true);
   };
   const handleClosesettings = () => {
+    setOpen(false);
+  };
+
+  //⭐️ ADD TASK MENU OPEN CLOSE FUNCTIONS
+  const handleClickOpenAddTask = () => {
+    setOpen(true);
+  };
+  const handleCloseAddTask = () => {
     setOpen(false);
   };
 
@@ -265,9 +275,28 @@ export default function Home() {
                   />
                 </Badge>
               </IconButton>
+
+              {/* ⭐️ ADD TASK BUTTON TOP */}
+              <IconButton color="inherit" onClick={handleClickOpenAddTask}>
+                <Badge
+                  style={{
+                    backgroundColor: "#1890ff",
+                    height: "50px",
+                    width: "50px",
+                    borderRadius: "5px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    boxShadow: "#1890ff 0px 4px 16px 0px",
+                  }}
+                >
+                  <AddOutlinedIcon
+                    style={{ color: "white", fontSize: "35px" }}
+                  />
+                </Badge>
+              </IconButton>
             </div>
           </div>
-            <TaskList />
+          <TaskList />
 
           {/* <Toolbar /> */}
         </Box>
@@ -387,6 +416,83 @@ export default function Home() {
               Logout
             </button>
           </div>
+        </DialogContent>
+        <DialogActions>
+          {/* <Button autoFocus onClick={handleClosesettings}>
+            Save Profile
+          </Button> */}
+        </DialogActions>
+      </BootstrapDialogSettings>
+
+      {/* ⭐️ ADD TASK */}
+
+      <BootstrapDialogSettings
+        onClose={handleCloseAddTask}
+        aria-labelledby="customized-dialog-title"
+        open={addTaskOpen}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          {/* Profile */}
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseAddTask}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[10],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent style={{ height: "auto", width: "600px" }}>
+          {/* <div style={{ display: "flex", justifyContent: "center" }}>
+            <img src={man} height="100px" width="100px" />
+          </div>
+          <h2 style={{ textAlign: "center" }}>{user.name}</h2>
+          <h3
+            style={{ textAlign: "center", marginTop: "-25px", color: "grey" }}
+          >
+            {user.email}
+          </h3>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                borderRadius: "5px",
+                boxShadow: "#1890ff 0px 4px 16px 0px",
+                backgroundColor: "#1890ff",
+                color: "white",
+                border: "none",
+                height: "40px",
+                width: "130px",
+              }}
+            >
+              Edit Profile
+            </button>
+          </div>
+          <br />
+
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button
+              onClick={handleLogout}
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                borderRadius: "5px",
+                boxShadow: "#f96970 0px 4px 16px 0px",
+                border: "2px solid #f96970",
+                color: "white",
+                backgroundColor: "#f96970",
+                height: "40px",
+                width: "130px",
+              }}
+            >
+              Logout
+            </button>
+          </div> */}
         </DialogContent>
         <DialogActions>
           {/* <Button autoFocus onClick={handleClosesettings}>

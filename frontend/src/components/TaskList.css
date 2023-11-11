@@ -62,7 +62,9 @@ table {
 .task-list {
   background-color: white;
   height: 50px;
+  width: 700px;
   display: flex;
+  
   align-items: center;
   justify-content: space-between;
   border-radius: 10px;
@@ -111,4 +113,8 @@ tr{
   padding: 1rem;
   background-color: #efefef00;
   text-align: center;
+}
+
+.task-item{
+
 }

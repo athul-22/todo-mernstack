@@ -79,14 +79,14 @@ function TaskList() {
   };
 
   return (
-    <div id="taskmain" style={{ overflowY: "hidden" }}>
-      <div className="container">
-        <div className="columns is-centered is-mobile">
-          <div>
+    <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        <div >
+        <div className="task-list-container" style={{display:'flex',justifyContent:'center', marginTop:'50px',height: "600px", overflowY: "scroll" }}>
             {taskList.length > 0 ? (
               <table>
                 {
-                  <tbody>
+                  <tbody style={{justifyContent:'center'}}>
                     {taskList.map((task) => (
                       <tr className="task-list" key={task._id}>
                         <td
@@ -159,7 +159,7 @@ function TaskList() {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    marginTop: "-200px",
+                    marginTop: "100px",
                     marginBottom: "100px",
                   }}
                 >

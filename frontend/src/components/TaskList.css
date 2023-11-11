@@ -1,19 +1,17 @@
-html, body {
-    width: 100%;
-    
-  }
+html,
+body {
+  width: 100%;
+}
 
-  #taskmain {
-    
-    height: 10vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    padding-top: 100px;
-    margin-bottom: 100px;
-    input.input, button.button {
+#taskmain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  /* padding-top: 100px; */
+  /* margin-bottom: 100px; */
+  /* input.input, button.button {
       border-radius: 0;
     }
     button.button {
@@ -21,54 +19,53 @@ html, body {
     }
     .list {
       margin-top: 50px;
-    }
-  }
-  
-  li.list-item.is-complete * {
-    text-decoration: line-through;
-    color: hsl(0, 0%, 71%);
-  }
-
-.taskinput{
-    width: 500px;
-    background-color: black;
-    color: #ffffff;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-    color: #ffffff;
-    padding-left: 20px;
+    } */
 }
 
-.submit{
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+li.list-item.is-complete * {
+  text-decoration: line-through;
+  color: hsl(0, 0%, 71%);
 }
 
-.taskinput::placeholder{
-    color: #ffffff;
-    
+.taskinput {
+  width: 500px;
+  background-color: black;
+  color: #ffffff;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  color: #ffffff;
+  padding-left: 20px;
 }
 
+.submit {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.taskinput::placeholder {
+  color: #ffffff;
+}
 
 /* TASK ITEM CSS */
 /* Style the table */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  
 }
-
 
 /* Style the task list rows */
 .task-list {
   background-color: white;
   height: 50px;
+  width: 700px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 10px;
   box-shadow: #f5f5f5 0px 4px 16px 0px;
-  
 }
 
 /* Style the checkbox */
@@ -77,7 +74,6 @@ table {
   margin-left: 20px;
   width: 20px; /* Set your desired width */
   height: 20px; /* Set your desired height */
-  
 }
 
 /* Style the task title */
@@ -87,8 +83,7 @@ table {
 }
 
 /* Style the delete button */
-.task-delete-btn{
-  
+.task-delete-btn {
   border-radius: 10px;
 }
 
@@ -97,7 +92,21 @@ table {
   cursor: pointer;
 }
 
-
-tr{
+tr {
   margin-bottom: 10px;
+}
+
+/* Style the add task SECTION */
+
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 30;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef00;
+  text-align: center;
+}
+
+.task-item {
 }

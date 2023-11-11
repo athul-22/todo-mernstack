@@ -13,9 +13,8 @@ function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [addNewTask, setAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState("");
-  const [isCompleted, setIsCompleted] = useState(task.completed);
+  // const [isCompleted, setIsCompleted] = useState(task.completed);
   const [isLoading, setIsLoading] = useState(false);
-
 
   useEffect(() => {
     getTasks();
@@ -65,56 +64,58 @@ function TaskList() {
   //   }
   // };
 
-  const handleCheckboxClick = async () => {
-    try{
+  const handleCheckboxClick = async (task) => {
+    try {
       await axios.put(`/api/tasks/${task._id}`, {
-        completed: !isCompleted,
+        completed: !task.isCompleted,
       });
-      setIsCompleted(!isCompleted);
-      toast.success('Task updated successfully');
-  }catch(err) {
-    console.log(err);
-    toast.error("Somehing went wrong");
-  }
-}
+      toast.success("Task updated successfully");
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div id="taskmain" style={{ overflowY: "hidden" }}>
-      <div className="container">
-        <div className="columns is-centered is-mobile">
-          <div>
+    <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        <div >
+        <div className="task-list-container" style={{display:'flex',justifyContent:'center', marginTop:'50px',height: "600px", overflowY: "scroll" }}>
             {taskList.length > 0 ? (
               <table>
                 {
-                  <tbody>
+                  <tbody style={{justifyContent:'center'}}>
                     {taskList.map((task) => (
                       <tr className="task-list" key={task._id}>
                         <td
                           className="task-item"
                           style={{ display: "flex", paddingTop: "5px" }}
                         >
-                          <input
+                          {/* <input
                             className="task-checkbox"
                             type="checkbox"
                             checked={isCompleted}
                             onChange={handleCheckboxClick}
-                            onClick={handleCheckboxClick}
-                          />
+                            onClick={handleCheckboxClick(task.id)}
+                          /> */}
 
-                          {/* <div
-                            // onChange={handleCheckboxClick}
+                          <div
+                            onChange={() => handleCheckboxClick(task)}
                             role="checkbox"
                             aria-checked
                           >
                             <input
+                              className="task-checkbox"
                               type="checkbox"
-                              checked={isCompleted}
-                              onClick={handleCheckboxClick(task._id)}
+                              checked={task.isCompleted}
                               disabled={isLoading}
                               readOnly
                               tabIndex={-1}
                             />
-                          </div> */}
+                          </div>
+
                           <p
                             className="task-title"
                             style={{
@@ -158,7 +159,7 @@ function TaskList() {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    marginTop: "-200px",
+                    marginTop: "100px",
                     marginBottom: "100px",
                   }}
                 >
@@ -172,44 +173,46 @@ function TaskList() {
                     color: "grey",
                   }}
                 >
-                  No Taskes are found!
+                  All Task's are completed ! 🎉
                 </p>
               </div>
             )}
           </div>
 
-          <input
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Task Title"
-            type="text"
-            className="taskinput"
-            // placeholder="Add Task"
-            style={{
-              cursor: "pointer",
-              fontSize: "17px",
-              color: "white",
-              border: "none",
-              height: "50px",
-            }}
-          />
-          <button
-            onClick={addTaskFun}
-            className="submit"
-            style={{
-              cursor: "pointer",
-              fontSize: "17px",
+          <div className="footer">
+            <input
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Task Title"
+              type="text"
+              className="taskinput"
+              // placeholder="Add Task"
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                color: "white",
+                border: "none",
+                height: "50px",
+              }}
+            />
+            <button
+              onClick={addTaskFun}
+              className="submit"
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
 
-              boxShadow: "#1890ff 0px 4px 16px 0px",
-              backgroundColor: "#1890ff",
-              color: "white",
-              border: "none",
-              height: "50px",
-              width: "130px",
-            }}
-          >
-            Submit
-          </button>
+                boxShadow: "#1890ff 0px 4px 16px 0px",
+                backgroundColor: "#1890ff",
+                color: "white",
+                border: "none",
+                height: "50px",
+                width: "130px",
+              }}
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </div>

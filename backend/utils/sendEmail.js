@@ -46,16 +46,24 @@ export const sentWelcomeEmail = async (newUser, res) => {
 </div>`,
     };
 
+    // try {
+    //     transporter
+    //         .sendMail(mailOptions)
+    //         .then(() => {
+    //             console.log("mail sent successfully")
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
     try {
-        transporter
-            .sendMail(mailOptions)
-            .then(() => {
-                console.log("mail sent successfully")
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        await transporter.sendMail(mailOptions);
+        console.log("Mail sent successfully");
     } catch (error) {
-        console.log(error);
+        console.log("Error sending mail:", error);
     }
+
 }

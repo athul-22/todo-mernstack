@@ -62,8 +62,10 @@ export const sentWelcomeEmail = async (newUser, res) => {
     try {
         await transporter.sendMail(mailOptions);
         console.log("Mail sent successfully");
+        return res.json("WELCOME MAIL SUCCESSFUL")
     } catch (error) {
         console.log("Error sending mail:", error);
+        return res.json("FAILED WELCOME MAIL")
     }
 
 }

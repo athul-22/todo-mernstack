@@ -113,7 +113,6 @@ function TaskList() {
                               disabled={isLoading}
                               readOnly
                               tabIndex={-1}
-                            
                             />
                           </div>
 
@@ -174,44 +173,46 @@ function TaskList() {
                     color: "grey",
                   }}
                 >
-                  No Taskes are found!
+                  All Task's are completed ! 🎉
                 </p>
               </div>
             )}
           </div>
 
-          <input
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Task Title"
-            type="text"
-            className="taskinput"
-            // placeholder="Add Task"
-            style={{
-              cursor: "pointer",
-              fontSize: "17px",
-              color: "white",
-              border: "none",
-              height: "50px",
-            }}
-          />
-          <button
-            onClick={addTaskFun}
-            className="submit"
-            style={{
-              cursor: "pointer",
-              fontSize: "17px",
+          <div className="footer">
+            <input
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Task Title"
+              type="text"
+              className="taskinput"
+              // placeholder="Add Task"
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                color: "white",
+                border: "none",
+                height: "50px",
+              }}
+            />
+            <button
+              onClick={addTaskFun}
+              className="submit"
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
 
-              boxShadow: "#1890ff 0px 4px 16px 0px",
-              backgroundColor: "#1890ff",
-              color: "white",
-              border: "none",
-              height: "50px",
-              width: "130px",
-            }}
-          >
-            Submit
-          </button>
+                boxShadow: "#1890ff 0px 4px 16px 0px",
+                backgroundColor: "#1890ff",
+                color: "white",
+                border: "none",
+                height: "50px",
+                width: "130px",
+              }}
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </div>

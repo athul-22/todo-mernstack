@@ -369,6 +369,7 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
+        
         <DialogContent style={{ height: "auto", width: "600px" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <img src={man} height="100px" width="100px" />
@@ -379,7 +380,7 @@ export default function Home() {
           >
             {user.email}
           </h3>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center" ,}}>
             <button
               style={{
                 cursor: "pointer",
@@ -395,10 +396,7 @@ export default function Home() {
             >
               Edit Profile
             </button>
-          </div>
-          <br />
-
-          <div style={{ display: "flex", justifyContent: "center" }}>
+            &nbsp;&nbsp;&nbsp;
             <button
               onClick={handleLogout}
               style={{
@@ -415,6 +413,26 @@ export default function Home() {
             >
               Logout
             </button>
+          </div>
+          <br />
+
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {/* <button
+              onClick={handleLogout}
+              style={{
+                cursor: "pointer",
+                fontSize: "17px",
+                borderRadius: "5px",
+                boxShadow: "#f96970 0px 4px 16px 0px",
+                border: "2px solid #f96970",
+                color: "white",
+                backgroundColor: "#f96970",
+                height: "40px",
+                width: "130px",
+              }}
+            >
+              Logout
+            </button> */}
           </div>
         </DialogContent>
         <DialogActions>

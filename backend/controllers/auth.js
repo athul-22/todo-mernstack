@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import User from '../models/User.js';
 import jwt from "jsonwebtoken";
 import createError from '../utils/errors.js'
+import sentWelcomeEmail from '../utils/sendEmail.js'
 
 export const register = async (req,res,next) => {
     if(!req.body.name || !req.body.email || !req.body.password){
@@ -17,8 +18,12 @@ export const register = async (req,res,next) => {
           password: hashedPassword,
         });
     
+        // WELCOME MAIL FUNCTION FROM UTILS
+        sentWelcomeEmail(newUser);
         await newUser.save();
+
         return res.status(201).json('New User Created');
+        
       } catch (err) {
         return next(createError({status:400,message:'Name email password required'}));
       }

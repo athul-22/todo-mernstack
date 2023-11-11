@@ -20,6 +20,7 @@ export const register = async (req,res,next) => {
     
         // WELCOME MAIL FUNCTION FROM UTILS
         sentWelcomeEmail(newUser);
+        
         await newUser.save();
 
         return res.status(201).json('New User Created');

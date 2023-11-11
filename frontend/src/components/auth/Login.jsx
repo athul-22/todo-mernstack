@@ -9,30 +9,29 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import fingerprint from './fingerprint.gif'
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom'
+import fingerprint from "./fingerprint.gif";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    try{
-        await axios.post('/api/auth/login',{
-            email,
-            password
-        })
-        navigate('/');
-        localStorage.setItem("username",email)
-    }catch(error){
-        console.log(error);
+    try {
+      await axios.post("/api/auth/login", {
+        email,
+        password,
+      });
+      navigate("/");
+      localStorage.setItem("username", email);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -72,7 +71,7 @@ export default function SignIn() {
             >
               {" "}
               {/* <LockOutlinedIcon /> */}
-              <img src={fingerprint} height="90px"/>
+              <img src={fingerprint} height="90px" />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
@@ -110,21 +109,40 @@ export default function SignIn() {
                 sx={{
                   mt: 3,
                   mb: 2,
-                  bgcolor: "#1E88E5",
-                  color: "#E3F2FD",
-                  width: "100%",
-                  height: "50px",
-                  fontSize: "20px",
+                  cursor: "pointer",
+                  fontSize: "17px",
+                  borderRadius: "5px",
+                  boxShadow: "#1890ff 0px 4px 16px 0px",
+                  backgroundColor: "#1890ff",
+                  color: "white",
+                  border: "none",
                 }}
               >
                 Sign In
               </Button>
+              <Link href="/register" variant="body2">
+                    <Button
+                      fullWidth
+                      style={{
+                        mt: 3,
+                        mb: 2,
+                        cursor: "pointer",
+                        fontSize: "17px",
+                        borderRadius: "5px",
+                        backgroundColor: "white",
+                        color: "#1890ff",
+                        border: "1px solid #1890ff",
+                        
+                      }}
+                    >
+                      Create Account
+                    </Button>
+                    {/* {"Don't have an account? Sign Up"} */}
+                  </Link>
 
               <Grid container>
                 <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                  
                 </Grid>
               </Grid>
             </Box>

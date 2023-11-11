@@ -5,33 +5,31 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import toast from 'react-hot-toast';
-import axios from 'axios'
+import toast from "react-hot-toast";
+import axios from "axios";
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import fingerprint from './fingerprint.gif'
-
+import fingerprint from "./fingerprint.gif";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-
-  const register = async(e) => {
+  const register = async (e) => {
     e.preventDefault();
     const user = {
-        name: e.target.name.value,
-        email: e.target.email.value,
-        password: e.target.password.value
+      name: e.target.name.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
     };
 
-    try{
-        await axios.post('/api/auth/register',user);
-        toast.success('Account created successfully');
-    }catch(error){
-        console.log(error);
-        toast.error('Something went wrong')
+    try {
+      await axios.post("/api/auth/register", user);
+      toast.success("Account created successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -69,18 +67,13 @@ export default function SignIn() {
                 fontSize: "60px",
               }}
             >
-             <img src={fingerprint} height="90px"/>
+              <img src={fingerprint} height="90px" />
               {/* <LockOutlinedIcon /> */}
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={register}
-              sx={{ mt: 3 }}
-            >
+            <Box component="form" noValidate onSubmit={register} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 {/* <Grid item xs={12} sm={6}>
                   <TextField
@@ -144,20 +137,40 @@ export default function SignIn() {
                 sx={{
                   mt: 3,
                   mb: 2,
-                  bgcolor: "#1E88E5",
-                  color: "#E3F2FD",
-                  width: "100%",
-                  height: "50px",
-                  fontSize: "20px",
+                  cursor: "pointer",
+                  fontSize: "17px",
+                  borderRadius: "5px",
+                  boxShadow: "#1890ff 0px 4px 16px 0px",
+                  backgroundColor: "#1890ff",
+                  color: "white",
+                  border: "none",
                 }}
-              >Sign Up
+              >
+                Sign Up
               </Button>
+              <Link href="/login" variant="body2">
+                <Button
+                  fullWidth
+                  style={{
+                    mt: 3,
+                    mb: 2,
+                    cursor: "pointer",
+                    fontSize: "17px",
+                    borderRadius: "5px",
+                    backgroundColor: "white",
+                    color: "#1890ff",
+                    border: "1px solid #1890ff",
+                  }}
+                >
+                  Login
+                </Button>
+              </Link>
               <Grid container justifyContent="flex-end">
-                <Grid item>
+                {/* <Grid item>
                   <Link href="/login" variant="body2">
                     Already have an account? Sign in
                   </Link>
-                </Grid>
+                </Grid> */}
               </Grid>
             </Box>
           </Box>

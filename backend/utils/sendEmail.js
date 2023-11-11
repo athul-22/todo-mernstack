@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { v4 as uuidv4 } from "uuid";
 // import { hashString } from "./index.js";
 // import Verification from '../models/emailVerification.js'
 // import PasswordReset from '../models/passwordReset.js'
@@ -17,10 +16,11 @@ let transporter = nodemailer.createTransport({
     },
 });
 
-export const sentWelcomeEmail = async (user, res) => {
-    const { email, name } = user;
+export const sentWelcomeEmail = async (newUser, res) => {
+    const { email, name } = newUser;
 
-    const token = _id + uuidv4();
+    console.log(email);
+    console.log(name);
 
     //   mail options
     const mailOptions = {

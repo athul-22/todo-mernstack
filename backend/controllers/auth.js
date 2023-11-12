@@ -32,7 +32,7 @@ export const register = async (req,res,next) => {
 
 export const login = async (req,res,next) => {
     if(!req.body.email || !req.body.password){
-        return next({status:400,message:'Name email password required'});
+        return next({status:400,message:'Email password required'});
     }
 
     try{
@@ -70,6 +70,8 @@ export const logout = (req,res,next) => {
     res.clearCookie('access_token');
     return res.status(200).json({message:'Logout Success'});
 }
+
+
 
 export const isLoggedIn = (req,res,next) => {
     const token = req.cookies.access_token;

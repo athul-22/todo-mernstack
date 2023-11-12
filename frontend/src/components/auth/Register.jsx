@@ -12,10 +12,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import fingerprint from "./fingerprint.gif";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
+
 export default function SignIn() {
+
+  const navigate = useNavigate();
+
   const register = async (e) => {
     e.preventDefault();
     const user = {
@@ -26,6 +31,7 @@ export default function SignIn() {
 
     try {
       await axios.post("/api/auth/register", user);
+      navigate("/");
       toast.success("Account created successfully");
     } catch (error) {
       console.log(error);

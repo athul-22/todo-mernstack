@@ -16,7 +16,7 @@ let transporter = nodemailer.createTransport({
     },
 });
 
-export const sentWelcomeEmail = async (newUser, res) => {
+const sentWelcomeEmail = async (newUser, res) => {
     const { email, name } = newUser;
 
     console.log(email);
@@ -27,23 +27,19 @@ export const sentWelcomeEmail = async (newUser, res) => {
         from: AUTH_EMAIL,
         to: email,
         subject: "Welcome to todo ai",
-        html: `<div
-    style='font-family: Arial, sans-serif; font-size: 20px; color: #333; background-color: #f7f7f7; padding: 20px; border-radius: 5px;'>
-    <h3 style="color: rgb(8, 56, 188)">Github repo link below</h3>
-    <hr>
-    <h4>Hi ${name},</h4>
-    <p>
-    https://github.com/athul-22/todo-mernstack
-    <br>
-    <a href="https://github.com/athul-22/todo-mernstack"
-        style="color: #fff; padding: 14px; text-decoration: none; background-color: #000;  border-radius: 8px; font-size: 18px;">Verify
-        Email Address</a>
-    </p>
-    <div style="margin-top: 20px;">
-        <h5>Best Regards</h5>
-        <h5>ShareFun Team</h5>
-    </div>
-</div>`,
+        html: `<div style='font-family: Arial, sans-serif; font-size: 20px; color: #333; background-color: #f7f7f7; padding: 20px; border-radius: 5px;'>
+        <h3 style="color: #1890ff; ">Github repo link below</h3>
+        <hr>
+        <h4>Hi ${name} 👋 </h4>
+        <p>
+            <a href="https://github.com/athul-22/todo-mernstack" style="color: #fff; padding: 14px; text-decoration: none; background-color: #1890ff; border-radius: 8px; font-size: 18px;box-shadow:#1890ff 0px 4px 16px 0px;">
+                VISIT GITHUB REPO
+            </a>
+        </p>
+        <div style="margin-top: 20px;">
+          
+        </div>
+    </div>`,
     };
 
     // try {
@@ -62,10 +58,12 @@ export const sentWelcomeEmail = async (newUser, res) => {
     try {
         await transporter.sendMail(mailOptions);
         console.log("Mail sent successfully");
-        return res.json("WELCOME MAIL SUCCESSFUL")
+        
     } catch (error) {
         console.log("Error sending mail:", error);
-        return res.json("FAILED WELCOME MAIL")
+       
     }
 
 }
+
+export default sentWelcomeEmail;

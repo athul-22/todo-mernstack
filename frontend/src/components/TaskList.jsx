@@ -13,12 +13,13 @@ function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [addNewTask, setAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState("");
-  // const [isCompleted, setIsCompleted] = useState(task.completed);
+  const [isCompleted, setIsCompleted] = useState(task.completed);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getTasks();
   }, []);
+
 
   const addTaskFun = async (e) => {
     e.preventDefault();
@@ -64,11 +65,41 @@ function TaskList() {
   //   }
   // };
 
-  const handleCheckboxClick = async (task) => {
+  // ⭐️ OLD CHECKED BOX FUNCTION
+
+  // const handleCheckboxClick = async (task) => {
+
+  //   setIsLoading(true);
+
+  //   try {
+  //     await axios.put(`/api/tasks/${task._id}`, {
+  //       completed: !task.isCompleted,
+  //     });
+  //     toast.success("Task updated successfully");
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error("Something went wrong");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleCheckboxClick = async (clickedTask) => {
+    setIsLoading(true);
+  
     try {
-      await axios.put(`/api/tasks/${task._id}`, {
-        completed: !task.isCompleted,
+      const updatedTasks = taskList.map(task => {
+        if (task._id === clickedTask._id) {
+          return { ...task, isCompleted: !task.isCompleted };
+        }
+        return task;
       });
+  
+      await axios.put(`/api/tasks/${clickedTask._id}`, {
+        completed: !clickedTask.isCompleted,
+      });
+      
+      setTaskList(updatedTasks);
       toast.success("Task updated successfully");
     } catch (err) {
       console.log(err);
@@ -77,6 +108,7 @@ function TaskList() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
@@ -119,9 +151,7 @@ function TaskList() {
                           <p
                             className="task-title"
                             style={{
-                              textDecoration: task.isCompleted
-                                ? "line-through"
-                                : "none",
+                              textDecoration: task.isCompleted ? 'line-through' : 'none',color:task.isCompleted ? 'red':'green',
                             }}
                           >
                             {task.title}

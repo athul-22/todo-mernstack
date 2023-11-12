@@ -23,7 +23,22 @@ export const register = async (req,res,next) => {
         
         await newUser.save();
 
-        return res.status(201).json('New User Created');
+        const user = await User.findOne({email: req.body.email}).select('name email password');
+
+        const payload = {
+            id:user._id,
+            name:user.name
+        }
+
+        const token = jwt.sign(payload,process.env.JWT_SECRETE, {
+            expiresIn:'1d'
+        })
+
+        return res.cookie('access_token',token, {
+            httpOnly: true
+        }).status(200)
+        .json({'message':'New user created'});
+
         
       } catch (err) {
         return next(createError({status:400,message:'Name email password required'}));

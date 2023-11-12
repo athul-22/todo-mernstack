@@ -98,8 +98,14 @@ function TaskList() {
       await axios.put(`/api/tasks/${clickedTask._id}`, {
         completed: !clickedTask.isCompleted,
       });
+
+      console.log(clickedTask);
+      console.log(clickedTask.isCompleted);
       
       setTaskList(updatedTasks);
+
+      await updateTaskCompletionStatus(clickedTask._id, !clickedTask.isCompleted);
+
       toast.success("Task updated successfully");
     } catch (err) {
       console.log(err);
@@ -108,13 +114,34 @@ function TaskList() {
       setIsLoading(false);
     }
   };
+
+  //UPDATE TASK FUNCTION
+  const updateTaskCompletionStatus = async (taskId, isCompleted) => {
+    try {
+      // Make an API call to your backend to update the task completion status
+      // Example using fetch:
+      await fetch(`/api/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ completed: isCompleted }),
+      });
+      // Handle success response if needed
+    
+    } catch (error) {
+      // Handle error
+      console.error('Error updating task completion status:', error);
+      throw error; // Throw the error to handle it in the click handler
+    }
+  };
   
 
   return (
     <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
         <div >
-        <div className="task-list-container" style={{display:'flex',justifyContent:'center', marginTop:'50px',height: "600px", overflowY: "scroll" }}>
+        <div className="task-list-container" style={{display:'flex',justifyContent:'center', marginTop:'50px',height: "550px", overflowY: "scroll" }}>
             {taskList.length > 0 ? (
               <table>
                 {
@@ -151,7 +178,7 @@ function TaskList() {
                           <p
                             className="task-title"
                             style={{
-                              textDecoration: task.isCompleted ? 'line-through' : 'none',color:task.isCompleted ? 'red':'green',
+                              textDecoration: task.isCompleted ? 'line-through' : 'none',color:task.isCompleted ? 'grey':'black',
                             }}
                           >
                             {task.title}

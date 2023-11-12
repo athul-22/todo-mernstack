@@ -110,6 +110,7 @@ export default function Home() {
   const [addTaskOpen, setOsetAddTaskOpen] = React.useState(false);
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
   const [user, setUser] = useState(null);
+  const [todayDate, setTodayDate] = useState('');
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -172,20 +173,32 @@ export default function Home() {
       console.log("usernameInput not found");
     }
 
-    const topTodayElement = document.querySelector(".top_today");
+    // const topTodayElement = document.querySelector(".top_today");
 
-    if (topTodayElement) {
-      const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-      const todayDate = new Date().toLocaleDateString(undefined, options);
+    // if (topTodayElement) {
+    //   const options = {
+    //     weekday: "long",
+    //     year: "numeric",
+    //     month: "long",
+    //     day: "numeric",
+    //   };
+    //   const todayDate = new Date().toLocaleDateString(undefined, options);
 
-      topTodayElement.textContent = todayDate;
-    }
+    //   topTodayElement.innerHTML = todayDate;
+    // }
   };
+
+  useEffect(() => {
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const today = new Date().toLocaleDateString(undefined, options);
+    setTodayDate(today);
+  }, []);
+  
 
   if (!user) {
     return null;
@@ -222,7 +235,7 @@ export default function Home() {
             <div className="top-greetings">
               Welcome <span className="username">{user.name}</span> 👋 !
             </div>
-            <div className="top_today"></div>
+            <div className="top_today">{todayDate}</div>
 
             <div className="top-right">
               {/* <IconButton color="inherit" style={{ backgroundColor: "white",

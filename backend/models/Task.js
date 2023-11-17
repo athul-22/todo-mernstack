@@ -15,7 +15,6 @@ const taskSchema = new Schema({
     priority: {
         type:String,
         required:false,
-        default:'n'
     },
     user: {
         type: Schema.Types.ObjectId,

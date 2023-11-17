@@ -30,7 +30,7 @@ function TaskList() {
       return;
     }
     try {
-      const { data } = await axios.post("/api/tasks", { title: newTask });
+      const { data } = await axios.post("/api/tasks", { title: newTask , priority: priority });
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
       setNewTask("");
@@ -247,9 +247,9 @@ function TaskList() {
 
                   { newTask && 
                   <div className="priority">
-                    <button className="red" >High Priority</button>
-                    <button className="orange" >Medium Priority</button>
-                    <button className="green" >Low Priority</button>
+                    <button className="red"  onClick={()=> setPriority('h')}>High Priority</button>
+                    <button className="orange" onClick={()=> setPriority('m')}>Medium Priority</button>
+                    <button className="green" onClick={()=> setPriority('l')}>Low Priority</button>
                   </div>
                   }
 

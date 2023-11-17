@@ -3,9 +3,10 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import "./TaskList.css";
 import BodyNoTask from "../images/boynotask.png";
-import TaskItem from "./TaskItem";
+// import TaskItem from "./TaskItem";
 import toast from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
+import Task from "../../../backend/models/Task";
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -23,13 +24,12 @@ function TaskList() {
   }, []);
 
   const addTaskFun = async (e) => {
+
     e.preventDefault();
     if (newTask.length <= 0) {
       toast.error("Task is empty");
       return;
     }
-
-    console.log(priority,"Priority");
 
     try {
       const { data } = await axios.post("/api/tasks", {
@@ -206,8 +206,14 @@ function TaskList() {
                               color: task.isCompleted ? "grey" : "black",
                             }}
                           >
-                            {task.title}
+                            {task.title} 
                           </p>
+                          
+                          {/* TASK PRIORITY COLOUR BOX  */}
+                          
+                          <div className={`priority-box ${task.priority}`}>
+                          
+                          </div>
                         </td>
                         <td>
                           {/* <button onClick={() => deleteTask(task._id)} className="task-delete-btn">

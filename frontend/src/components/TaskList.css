@@ -166,3 +166,26 @@ tr {
   cursor: pointer;
   color: white;
 }
+
+.priority-box {
+  width: 30px;
+  height: 10px;
+  border-radius: 20px;
+ margin-left: 10px;
+  margin-top: 30px;
+  display: inline-flex;
+}
+
+/* Style the priority colors */
+
+.h{
+  background-color: #ff0000;
+}
+
+.m{
+  background-color:#ff9900;
+}
+
+.l{
+  background-color:#50C878;
+}

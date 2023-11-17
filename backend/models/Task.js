@@ -13,8 +13,8 @@ const taskSchema = new Schema({
         default:false,
     },
     priority: {
-        type:String,
-        required:false,
+        type: String,
+        required: false,
     },
     user: {
         type: Schema.Types.ObjectId,

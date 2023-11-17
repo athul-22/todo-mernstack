@@ -15,13 +15,12 @@ function TaskList() {
   const [newTask, setNewTask] = useState("");
   const [isCompleted, setIsCompleted] = useState(task.completed);
   const [isLoading, setIsLoading] = useState(false);
-  const [ipFocused,setipFocused] = useState(false);
-  const [priority,setPriority] = useState('n');
+  const [ipFocused, setipFocused] = useState(false);
+  const [priority, setPriority] = useState("n");
 
   useEffect(() => {
     getTasks();
   }, []);
-
 
   const addTaskFun = async (e) => {
     e.preventDefault();
@@ -29,8 +28,14 @@ function TaskList() {
       toast.error("Task is empty");
       return;
     }
+
+    console.log(priority,"Priority");
+
     try {
-      const { data } = await axios.post("/api/tasks", { title: newTask , priority: priority });
+      const { data } = await axios.post("/api/tasks", {
+        title: newTask,
+        priority:priority
+      });
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
       setNewTask("");
@@ -88,25 +93,28 @@ function TaskList() {
 
   const handleCheckboxClick = async (clickedTask) => {
     setIsLoading(true);
-  
+
     try {
-      const updatedTasks = taskList.map(task => {
+      const updatedTasks = taskList.map((task) => {
         if (task._id === clickedTask._id) {
           return { ...task, isCompleted: !task.isCompleted };
         }
         return task;
       });
-  
+
       await axios.put(`/api/tasks/${clickedTask._id}`, {
         completed: !clickedTask.isCompleted,
       });
 
       console.log(clickedTask);
       console.log(clickedTask.isCompleted);
-      
+
       setTaskList(updatedTasks);
 
-      await updateTaskCompletionStatus(clickedTask._id, !clickedTask.isCompleted);
+      await updateTaskCompletionStatus(
+        clickedTask._id,
+        !clickedTask.isCompleted
+      );
 
       toast.success("Task updated successfully");
     } catch (err) {
@@ -123,36 +131,43 @@ function TaskList() {
       // Make an API call to your backend to update the task completion status
       // Example using fetch:
       await fetch(`/api/tasks/${taskId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ completed: isCompleted }),
       });
       // Handle success response if needed
-    
     } catch (error) {
       // Handle error
-      console.error('Error updating task completion status:', error);
+      console.error("Error updating task completion status:", error);
       throw error; // Throw the error to handle it in the click handler
     }
   };
 
   // const inputChange = () => {
   //   let inputTaskValue = document.getElementsByClassName('taskinput').value;
-    
+
   // }
-  
 
   return (
     <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
-        <div >
-        <div className="task-list-container" style={{display:'flex',justifyContent:'center', marginTop:'50px',height: "550px", overflowY: "scroll" }}>
+        <div>
+          <div
+            className="task-list-container"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "50px",
+              height: "550px",
+              overflowY: "scroll",
+            }}
+          >
             {taskList.length > 0 ? (
               <table>
                 {
-                  <tbody style={{justifyContent:'center'}}>
+                  <tbody style={{ justifyContent: "center" }}>
                     {taskList.map((task) => (
                       <tr className="task-list" key={task._id}>
                         <td
@@ -185,7 +200,10 @@ function TaskList() {
                           <p
                             className="task-title"
                             style={{
-                              textDecoration: task.isCompleted ? 'line-through' : 'none',color:task.isCompleted ? 'grey':'black',
+                              textDecoration: task.isCompleted
+                                ? "line-through"
+                                : "none",
+                              color: task.isCompleted ? "grey" : "black",
                             }}
                           >
                             {task.title}
@@ -245,20 +263,28 @@ function TaskList() {
 
           <div className="footer">
 
-                  { newTask && 
-                  <div className="priority">
-                    <button className="red"  onClick={()=> setPriority('h')}>High Priority</button>
-                    <button className="orange" onClick={()=> setPriority('m')}>Medium Priority</button>
-                    <button className="green" onClick={()=> setPriority('l')}>Low Priority</button>
-                  </div>
-                  }
+            {newTask && (
+              <div className="priority">
+                <button className="red" onClick={() => setPriority("h")}>
+                  High Priority
+                </button>
+                <button className="orange" onClick={() => setPriority("m")}>
+                  Medium Priority
+                </button>
+                <button className="green" onClick={() => setPriority("l")}>
+                  Low Priority
+                </button>
+              </div>
+            )}
 
             <input
               value={newTask}
               // onChange={inputChange}
-              onChange={(e) => {setNewTask(e.target.value)}}
-              onFocus={()=> setipFocused(true)}
-              onBlur={()=> setipFocused(false)}
+              onChange={(e) => {
+                setNewTask(e.target.value);
+              }}
+              onFocus={() => setipFocused(true)}
+              onBlur={() => setipFocused(false)}
               placeholder="Task Title"
               type="text"
               className="taskinput"

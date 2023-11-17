@@ -15,6 +15,8 @@ function TaskList() {
   const [newTask, setNewTask] = useState("");
   const [isCompleted, setIsCompleted] = useState(task.completed);
   const [isLoading, setIsLoading] = useState(false);
+  const [ipFocused,setipFocused] = useState(false);
+  const [priority,setPriority] = useState('n');
 
   useEffect(() => {
     getTasks();
@@ -135,6 +137,11 @@ function TaskList() {
       throw error; // Throw the error to handle it in the click handler
     }
   };
+
+  // const inputChange = () => {
+  //   let inputTaskValue = document.getElementsByClassName('taskinput').value;
+    
+  // }
   
 
   return (
@@ -237,9 +244,21 @@ function TaskList() {
           </div>
 
           <div className="footer">
+
+                  { newTask && 
+                  <div className="priority">
+                    <button className="red" >High Priority</button>
+                    <button className="orange" >Medium Priority</button>
+                    <button className="green" >Low Priority</button>
+                  </div>
+                  }
+
             <input
               value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
+              // onChange={inputChange}
+              onChange={(e) => {setNewTask(e.target.value)}}
+              onFocus={()=> setipFocused(true)}
+              onBlur={()=> setipFocused(false)}
               placeholder="Task Title"
               type="text"
               className="taskinput"

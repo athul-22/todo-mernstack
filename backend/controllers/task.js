@@ -6,7 +6,8 @@ export const createTask = async(req,res,next) => {
         const newTask = new Task({
             title:req.body.title,
             user:req.user.id,
-            completed:req.body.completed
+            completed:req.body.completed,
+            priority:req.body.priority
         })
         const savedTask = await newTask.save();
         return res.status(201).json(savedTask);

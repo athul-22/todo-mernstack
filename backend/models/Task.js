@@ -20,11 +20,11 @@ const taskSchema = new Schema({
         type: String,
         required: false,
     },
-    date : {
+    datenew : {
         type: String,
         required: false,
     },
-    time : {
+    timenew : {
         type: String,
         required: false,
     },

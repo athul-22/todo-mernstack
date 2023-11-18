@@ -44,13 +44,13 @@ function TaskList() {
 
       const formattedDate = dayjs(datetime).format('YYYY-MM-DD');
       const formattedTime = dayjs(datetime).format('HH:mm:ss.SSSZ');
-      
+      console.log(formattedDate, formattedTime);
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
         priority: priority,
         datetime: datetime,
-        date: formattedDate,
-        time: formattedTime,
+        datenew: formattedDate,
+        timenew: formattedTime,
       });
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
@@ -222,7 +222,7 @@ function TaskList() {
                               color: task.isCompleted ? "grey" : "black",
                             }}
                           >
-                            {task.title} {task.datetime} {task.time} | {task.date}
+                            {task.title} {task.datetime} time: {task.timenew} | date: {task.datenew}
                           </p>
 
                           {/* TASK PRIORITY COLOUR BOX  */}

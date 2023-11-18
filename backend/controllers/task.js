@@ -2,11 +2,16 @@ import Task from '../models/Task.js'
 import createError from '../utils/errors.js'
 
 export const createTask = async(req,res,next) => {
+
     try{
         const newTask = new Task({
             title:req.body.title,
+            completed:req.body.completed,
+            priority:req.body.priority,
+            datetime:req.body.datetime,
+            datenew:req.body.formattedDate,
+            timenew:req.body.formattedTime,
             user:req.user.id,
-            completed:req.body.completed
         })
         const savedTask = await newTask.save();
         return res.status(201).json(savedTask);

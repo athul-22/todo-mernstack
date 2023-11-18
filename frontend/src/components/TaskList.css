@@ -101,12 +101,91 @@ tr {
 .footer {
   position: fixed;
   right: 0;
-  bottom: 30;
+  
+  bottom: 20px;
   left: 0;
   padding: 1rem;
   background-color: #efefef00;
   text-align: center;
+  justify-content: center;
 }
 
 .task-item {
+
+}
+
+.priority{
+  margin-bottom: 10px;
+  
+}
+
+
+.red{
+  height: 40px;
+  width: 130px;
+  background-color:white;
+  border: 2px solid #ff0000;
+  color: #ff675c;
+  border-radius: 50px;
+  margin-right: 20px;
+}
+
+.red:hover{
+  background-color: #ff0000;
+  cursor: pointer;
+  color: white;
+}
+
+.orange{
+  height: 40px;
+  width: 130px;
+  background-color:white;
+  border: 2px solid #ff9900;
+  color: #ff9900;
+  border-radius: 50px;
+  margin-right: 20px;
+}
+
+.orange:hover{
+  background-color:#ff9900;
+  cursor: pointer;
+  color: white;
+}
+
+.green{
+  height: 40px;
+  width: 130px;
+  background-color:white;
+  border: 2px solid #50C878;
+  color: #50C878;
+  border-radius: 50px;
+}
+
+.green:hover{
+  background-color:#50C878;
+  cursor: pointer;
+  color: white;
+}
+
+.priority-box {
+  width: 30px;
+  height: 10px;
+  border-radius: 20px;
+ margin-left: 10px;
+  margin-top: 30px;
+  display: inline-flex;
+}
+
+/* Style the priority colors */
+
+.h{
+  background-color: #ff0000;
+}
+
+.m{
+  background-color:#ff9900;
+}
+
+.l{
+  background-color:#50C878;
 }

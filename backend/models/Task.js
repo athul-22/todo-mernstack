@@ -12,6 +12,22 @@ const taskSchema = new Schema({
         required: false,
         default:false,
     },
+    priority: {
+        type: String,
+        required: false,
+    },
+    datetime : {
+        type: String,
+        required: false,
+    },
+    datenew : {
+        type: String,
+        required: false,
+    },
+    timenew : {
+        type: String,
+        required: false,
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref:"Users",

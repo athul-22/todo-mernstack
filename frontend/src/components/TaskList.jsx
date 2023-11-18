@@ -222,7 +222,7 @@ function TaskList() {
                               color: task.isCompleted ? "grey" : "black",
                             }}
                           >
-                            {task.title} {task.datetime} time: {task.timenew} | date: {task.datenew}
+                            {task.title} 
                           </p>
 
                           {/* TASK PRIORITY COLOUR BOX  */}

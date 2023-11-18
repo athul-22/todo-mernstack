@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -7,6 +8,13 @@ import BodyNoTask from "../images/boynotask.png";
 import toast from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
 import Task from "../../../backend/models/Task";
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
+
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -18,23 +26,31 @@ function TaskList() {
   const [isLoading, setIsLoading] = useState(false);
   const [ipFocused, setipFocused] = useState(false);
   const [priority, setPriority] = useState("n");
+  const [ datetime, setDateTime] = useState('null');
 
   useEffect(() => {
     getTasks();
   }, []);
 
   const addTaskFun = async (e) => {
-
     e.preventDefault();
+
     if (newTask.length <= 0) {
       toast.error("Task is empty");
       return;
     }
 
     try {
+
+      const formattedDate = dayjs(datetime).format('YYYY-MM-DD');
+      const formattedTime = dayjs(datetime).format('HH:mm:ss.SSSZ');
+      
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
-        priority:priority
+        priority: priority,
+        datetime: datetime,
+        date: formattedDate,
+        time: formattedTime,
       });
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
@@ -206,14 +222,14 @@ function TaskList() {
                               color: task.isCompleted ? "grey" : "black",
                             }}
                           >
-                            {task.title} 
+                            {task.title} {task.datetime} {task.time} | {task.date}
                           </p>
-                          
+
                           {/* TASK PRIORITY COLOUR BOX  */}
-                          
-                          <div className={`priority-box ${task.priority}`}>
-                          
-                          </div>
+
+                          <div
+                            className={`priority-box ${task.priority}`}
+                          ></div>
                         </td>
                         <td>
                           {/* <button onClick={() => deleteTask(task._id)} className="task-delete-btn">
@@ -261,25 +277,44 @@ function TaskList() {
                     color: "grey",
                   }}
                 >
-                  All Task's are completed ! 🎉
+                  All Tasks are completed ! 🎉
                 </p>
               </div>
             )}
           </div>
 
           <div className="footer">
-
             {newTask && (
-              <div className="priority">
-                <button className="red" onClick={() => setPriority("h")}>
-                  High Priority
-                </button>
-                <button className="orange" onClick={() => setPriority("m")}>
-                  Medium Priority
-                </button>
-                <button className="green" onClick={() => setPriority("l")}>
-                  Low Priority
-                </button>
+              <div>
+                <div className="datetime">
+                  <LocalizationProvider dateAdapter={AdapterDayjs} >
+                    <DemoContainer 
+                      components={["DateTimePicker", "DateTimePicker"]}
+                    >
+                      <DateTimePicker
+                        label="Choose Date and Time"
+                        value={datetime}
+                        onChange={(newValue) => setDateTime(newValue)}
+                        style={{ width: '300px', border: 'none' }}
+              renderInput={(props) => (
+                <input {...props} style={{ border: 'none', width: '100%' }} />
+              )}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+
+                <div className="priority">
+                  <button className="red" onClick={() => setPriority("h")}>
+                    High Priority
+                  </button>
+                  <button className="orange" onClick={() => setPriority("m")}>
+                    Medium Priority
+                  </button>
+                  <button className="green" onClick={() => setPriority("l")}>
+                    Low Priority
+                  </button>
+                </div>
               </div>
             )}
 

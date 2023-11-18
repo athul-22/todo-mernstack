@@ -8,6 +8,9 @@ export const createTask = async(req,res,next) => {
             title:req.body.title,
             completed:req.body.completed,
             priority:req.body.priority,
+            datetime:req.body.datetime,
+            date:req.body.formattedDate,
+            time:req.body.formattedTime,
             user:req.user.id,
         })
         const savedTask = await newTask.save();

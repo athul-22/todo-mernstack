@@ -16,6 +16,18 @@ const taskSchema = new Schema({
         type: String,
         required: false,
     },
+    datetime : {
+        type: String,
+        required: false,
+    },
+    date : {
+        type: String,
+        required: false,
+    },
+    time : {
+        type: String,
+        required: false,
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref:"Users",

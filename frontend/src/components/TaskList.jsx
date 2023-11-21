@@ -8,13 +8,11 @@ import BodyNoTask from "../images/boynotask.png";
 import toast from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
 import Task from "../../../backend/models/Task";
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
-
+import dayjs, { Dayjs } from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -26,7 +24,7 @@ function TaskList() {
   const [isLoading, setIsLoading] = useState(false);
   const [ipFocused, setipFocused] = useState(false);
   const [priority, setPriority] = useState("n");
-  const [ datetime, setDateTime] = useState('null');
+  const [datetime, setDateTime] = useState("null");
 
   useEffect(() => {
     getTasks();
@@ -41,9 +39,8 @@ function TaskList() {
     }
 
     try {
-
-      const formattedDate = dayjs(datetime).format('YYYY-MM-DD');
-      const formattedTime = dayjs(datetime).format('HH:mm:ss.SSSZ');
+      const formattedDate = dayjs(datetime).format("YYYY-MM-DD");
+      const formattedTime = dayjs(datetime).format("HH:mm:ss.SSSZ");
       console.log(formattedDate, formattedTime);
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
@@ -222,7 +219,7 @@ function TaskList() {
                               color: task.isCompleted ? "grey" : "black",
                             }}
                           >
-                            {task.title} 
+                            {task.title}
                           </p>
 
                           {/* TASK PRIORITY COLOUR BOX  */}
@@ -287,18 +284,22 @@ function TaskList() {
             {newTask && (
               <div>
                 <div className="datetime">
-                  <LocalizationProvider dateAdapter={AdapterDayjs} >
-                    <DemoContainer 
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer
                       components={["DateTimePicker", "DateTimePicker"]}
                     >
                       <DateTimePicker
+                      className="datetimepicker"
                         label="Choose Date and Time"
                         value={datetime}
                         onChange={(newValue) => setDateTime(newValue)}
-                        style={{ width: '300px', border: 'none' }}
-              renderInput={(props) => (
-                <input {...props} style={{ border: 'none', width: '100%' }} />
-              )}
+                        style={{ width: "10%", border: "none" }}
+                        renderInput={(props) => (
+                          <input
+                            {...props}
+                            style={{ border: "none", width: "10%" }}
+                          />
+                        )}
                       />
                     </DemoContainer>
                   </LocalizationProvider>

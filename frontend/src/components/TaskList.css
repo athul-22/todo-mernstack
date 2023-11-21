@@ -189,3 +189,14 @@ tr {
 .l{
   background-color:#50C878;
 }
+
+.datetimepicker{
+  width: 100px;
+  border: 2px solid black;
+}
+
+.datetime{
+  background-color:#f6f9fb;
+  margin-left: 200px;
+  margin-bottom: -40px;
+}

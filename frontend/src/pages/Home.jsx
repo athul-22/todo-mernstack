@@ -46,7 +46,7 @@ const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
 // const drawerWidth = 240;
 
 //⭐️ DILOG MODEL
-// WELCOME DIALOG BOX
+//⭐️ WELCOME DIALOG BOX
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -477,7 +477,7 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent style={{ height: "auto", width: "600px" }}>
+        <DialogContent style={{ height: "auto", width: "100px" }}>
           {/* <div style={{ display: "flex", justifyContent: "center" }}>
             <img src={man} height="100px" width="100px" />
           </div>

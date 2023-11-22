@@ -191,12 +191,23 @@ tr {
 }
 
 .datetimepicker{
-  width: 100px;
-  border: 2px solid black;
+  border: none;
 }
 
 .datetime{
   background-color:#f6f9fb;
-  margin-left: 200px;
   margin-bottom: -40px;
+  display: flex;
+  justify-content: center;
+  margin-right: 600px;
+  width: 20px;
+  border: none;
+  outline: none;
+  border :none;
+
+}
+
+div.priority{
+  border: none;
+  outline: none;
 }

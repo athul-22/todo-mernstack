@@ -6,7 +6,8 @@ import EditProfile from "./pages/editProfile";
 import PrivateRoutes from "./components/PrivateRoutes.jsx"
 import NotFound from "./pages/NotFound";
 import Login from './components/auth/Login'
-import Register from './components/auth/Register'
+import Register from './components/auth/Register';
+import Test from './TEST/Testing.jsx'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         {/* <Route path="/auth" element={<Auth />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/test" element={<Test />} />
       </Routes>
     </>
   );

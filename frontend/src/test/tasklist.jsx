@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { styled } from '@mui/system';
 import axios from "axios";
 import { Button } from "@mui/material";
 import "./TaskList.css";
@@ -15,22 +14,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-// const StyledInput = styled('input')({
-//   '&.datetimepicker': {
-//     border: 'none',
-//     width: '5%',
-//     color: 'red',
-//   },
-// });
-
-
-// const useStyles = makeStyles({
-//   // Define a class to override the border style
-//   noBorder: {
-//     border: 'none',
-//   },
-// });
-
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState("");
@@ -43,7 +26,7 @@ function TaskList() {
   const [priority, setPriority] = useState("n");
   const [datetime, setDateTime] = useState("null");
 
-
+ 
   const [isDateTimePickerOpen, setDateTimePickerOpen] = useState(false);
 
   const handleButtonClick = () => {
@@ -187,7 +170,6 @@ function TaskList() {
 
   // }
 
-
   return (
     <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
@@ -310,7 +292,7 @@ function TaskList() {
               <div>
                 <div className="datetime">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {newTask && (
+                    { newTask && (
                       <DateTimePicker
                         className="datetimepicker"
                         // label="Choose Date and Time"
@@ -318,10 +300,9 @@ function TaskList() {
                         value={datetime}
                         onChange={(newValue) => setDateTime(newValue)}
                         renderInput={(props) => (
-                          <StyledInput
+                          <input
                             {...props}
-                            className="datetimepicker"
-                            style={{ width: '5%', color: 'red' }}
+                            style={{ border: 'none', width: '5%',color:'red'}}
                           />
                         )}
                       />

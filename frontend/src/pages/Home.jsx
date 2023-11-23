@@ -22,6 +22,7 @@ import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, Divider } from "@mui/material";
 import WelcomeGif from "../images/welcome.gif";
+import verified from '../images/verified.png'
 import todo from '../images/todo.png'
 import welcomeImage from '../images/welcomebw.png'
 import bot from '../images/bot.png'
@@ -115,6 +116,7 @@ export default function Home() {
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
   const [user, setUser] = useState(null);
   const [todayDate, setTodayDate] = useState('');
+  const [verified , setVerified ] = useState('')
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -138,6 +140,7 @@ export default function Home() {
     try {
       const { data } = await axios.get("/api/users/profile");
       setUser(data);
+      setVerified(data.verified)
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -384,7 +387,14 @@ export default function Home() {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <img src={man} height="100px" width="100px" />
           </div>
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+
           <h2 style={{ textAlign: "center" }}>{user.name}</h2>
+          {/* IF VERIFIED VAR TRUE THEN DISPLAY VERIFIED ICON ELSE NOT */}
+          { verified &&
+            <img src={verified} style={{marginLeft:'10px'}}  height="30px" width="30px"/>}
+
+          </div>
           <h3
             style={{ textAlign: "center", marginTop: "-25px", color: "grey" }}
           >

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -21,6 +22,10 @@ import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, Divider } from "@mui/material";
 import WelcomeGif from "../images/welcome.gif";
+import verified from '../images/verified.png'
+import todo from '../images/todo.png'
+import welcomeImage from '../images/welcomebw.png'
+import bot from '../images/bot.png'
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"; // import Chart from './Chart';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
@@ -33,6 +38,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import TaskList from "../components/TaskList";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import { response } from "express";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -46,7 +52,7 @@ const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
 // const drawerWidth = 240;
 
 //⭐️ DILOG MODEL
-// WELCOME DIALOG BOX
+//⭐️ WELCOME DIALOG BOX
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -111,6 +117,7 @@ export default function Home() {
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
   const [user, setUser] = useState(null);
   const [todayDate, setTodayDate] = useState('');
+  const [verified , setVerified ] = useState(false)
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -134,6 +141,8 @@ export default function Home() {
     try {
       const { data } = await axios.get("/api/users/profile");
       setUser(data);
+      console.log(response.data);
+      setVerified(response.data.verified)
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -198,7 +207,7 @@ export default function Home() {
     const today = new Date().toLocaleDateString(undefined, options);
     setTodayDate(today);
   }, []);
-  
+
 
   if (!user) {
     return null;
@@ -320,11 +329,15 @@ export default function Home() {
         onClose={handleClosesettings}
         aria-labelledby="customized-dialog-title"
         open={welcomeOpen}
+
       >
         <DialogTitle
-          sx={{ m: 1, p: 2 }}
+          sx={{ m: 3, p: 2 }}
           id="customized-dialog-title"
-        ></DialogTitle>
+        >
+          <h1>Welcome 🎉</h1>
+          <span style={{ color: 'grey', fontSize: '20px', marginTop: '-220px' }}>Your now a member of MERNAI</span>
+        </DialogTitle>
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -337,27 +350,16 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent>
-          <img src={WelcomeGif} height="300px" width="300px" />
-          {/* <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
-          </Typography> */}
+        <DialogContent style={{ marginTop: '-20px', marginBottom: '10px', width: '550px', height: 'auto', display: 'flex', justifyContent: 'center' }}>
+          {/* <h3>Welcome 🎉, Your now a member of MERNAI</h3> */}
+          <br />
+          <img src={todo} height="200px" width="200px" />
+
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClosesettings}>
+          {/* <Button autoFocus onClick={handleClosesettings}>
             Continue
-          </Button>
+          </Button> */}
         </DialogActions>
       </BootstrapDialog>
 
@@ -382,18 +384,25 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
-        
+
         <DialogContent style={{ height: "auto", width: "600px" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <img src={man} height="100px" width="100px" />
           </div>
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+
           <h2 style={{ textAlign: "center" }}>{user.name}</h2>
+          {/* IF VERIFIED VAR TRUE THEN DISPLAY VERIFIED ICON ELSE NOT */}
+          { verified &&
+            <img src={verified} style={{marginLeft:'10px'}}  height="30px" width="30px"/>}
+
+          </div>
           <h3
             style={{ textAlign: "center", marginTop: "-25px", color: "grey" }}
           >
             {user.email}
           </h3>
-          <div style={{ display: "flex", justifyContent: "center" ,}}>
+          <div style={{ display: "flex", justifyContent: "center", }}>
             <button
               style={{
                 cursor: "pointer",
@@ -477,7 +486,7 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent style={{ height: "auto", width: "600px" }}>
+        <DialogContent style={{ height: "auto", width: "100px" }}>
           {/* <div style={{ display: "flex", justifyContent: "center" }}>
             <img src={man} height="100px" width="100px" />
           </div>

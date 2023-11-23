@@ -38,6 +38,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import TaskList from "../components/TaskList";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import { response } from "express";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -116,7 +117,7 @@ export default function Home() {
   const [welcomeOpen, setWelcomeOpen] = React.useState(false);
   const [user, setUser] = useState(null);
   const [todayDate, setTodayDate] = useState('');
-  const [verified , setVerified ] = useState('')
+  const [verified , setVerified ] = useState(false)
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -140,7 +141,8 @@ export default function Home() {
     try {
       const { data } = await axios.get("/api/users/profile");
       setUser(data);
-      setVerified(data.verified)
+      console.log(response.data);
+      setVerified(response.data.verified)
       console.log(data);
     } catch (err) {
       console.log(err);

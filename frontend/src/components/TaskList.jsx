@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { styled } from '@mui/system';
@@ -14,6 +16,9 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 // const StyledInput = styled('input')({
 //   '&.datetimepicker': {
@@ -42,6 +47,9 @@ function TaskList() {
   const [ipFocused, setipFocused] = useState(false);
   const [priority, setPriority] = useState("n");
   const [datetime, setDateTime] = useState("null");
+  const [datetimeval, setDateTimeVal] = useState('');
+  const [selectedPriority, setSelectedPriority] = useState("n"); // Add this state variable
+
 
 
   const [isDateTimePickerOpen, setDateTimePickerOpen] = useState(false);
@@ -63,19 +71,22 @@ function TaskList() {
     }
 
     try {
-      const formattedDate = dayjs(datetime).format("YYYY-MM-DD");
-      const formattedTime = dayjs(datetime).format("HH:mm:ss.SSSZ");
-      console.log(formattedDate, formattedTime);
+      const formattedDate = dayjs(datetimeval).format("YYYY-MM-DD");
+      const formattedTime = dayjs(datetimeval).format("HH:mm:ss.SSS[Z]"); // Note the format change here
+      console.log(formattedDate, "formatted date");
+
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
         priority: priority,
-        datetime: datetime,
+        datetime: datetimeval,
         datenew: formattedDate,
         timenew: formattedTime,
       });
+
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
       setNewTask("");
+
     } catch (error) {
       console.log(error);
     }
@@ -308,7 +319,9 @@ function TaskList() {
           <div className="footer">
             {newTask && (
               <div>
-                <div className="datetime">
+
+                {/* DATE TIME OLD */}
+                {/* <div className="datetime">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     {newTask && (
                       <DateTimePicker
@@ -328,16 +341,73 @@ function TaskList() {
                     )}
 
                   </LocalizationProvider>
-                </div>
+                </div> */}
 
-                <div className="priority">
-                  <button className="red" onClick={() => setPriority("h")}>
+                {/* <div className="priority">
+                  <button  className="red" onClick={() => setPriority("h")}>
                     High Priority
                   </button>
                   <button className="orange" onClick={() => setPriority("m")}>
                     Medium Priority
                   </button>
                   <button className="green" onClick={() => setPriority("l")}>
+                    Low Priority
+                  </button>
+                </div> */}
+                <div className="priority">
+                  <div>
+                    <DatePicker
+                      selected={datetimeval}
+                      onChange={(date) => setDateTimeVal(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                      popperPlacement="bottom-start"
+                      popperModifiers={{
+                        flip: {
+                          behavior: ['bottom'],
+                        },
+                        preventOverflow: {
+                          enabled: false,
+                        },
+                        hide: {
+                          enabled: false,
+                        },
+                      }}
+                      popperClassName="date-picker-popper"
+                      showPopperArrow={false}
+                      customInput={<CustomCalendarIcon />}
+                    />
+                  </div>
+                  <button
+                    className={`red ${selectedPriority === "h" ? "selected" : ""}`}
+                    onClick={() => {
+                      setPriority("h");
+                      setSelectedPriority("h");
+                    }}
+                  >
+                    High Priority
+                  </button>
+                  <button
+                    className={`orange ${selectedPriority === "m" ? "selected" : ""
+                      }`}
+                    onClick={() => {
+                      setPriority("m");
+                      setSelectedPriority("m");
+                    }}
+                  >
+                    Medium Priority
+                  </button>
+                  <button
+                    className={`green ${selectedPriority === "l" ? "selected" : ""
+                      }`}
+                    onClick={() => {
+                      setPriority("l");
+                      setSelectedPriority("l");
+                    }}
+                  >
                     Low Priority
                   </button>
                 </div>
@@ -364,6 +434,7 @@ function TaskList() {
                 height: "50px",
               }}
             />
+
             <button
               onClick={addTaskFun}
               className="submit"
@@ -387,5 +458,10 @@ function TaskList() {
     </div>
   );
 }
+
+const CustomCalendarIcon = React.forwardRef(({ value, onClick }, ref) => (
+  <CalendarTodayIcon  onClick={onClick} color="white" style={{marginRight:'30px',marginTop:'-5px',backgroundColor:"#1890ff",color:'white',height:'50px',width:'50px',padding:'10px',boxShadow: "#1890ff 0px 4px 16px 0px",borderRadius:'10px'}} ref={ref} />
+));
+
 
 export default TaskList;

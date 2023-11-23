@@ -116,7 +116,8 @@ tr {
 
 .priority{
   margin-bottom: 10px;
-  
+  display: flex;
+  justify-content:center;
 }
 
 
@@ -159,6 +160,10 @@ tr {
   border: 2px solid #50C878;
   color: #50C878;
   border-radius: 50px;
+}
+
+.green.selected{
+  background-color: #50C878;
 }
 
 .green:hover{
@@ -207,7 +212,17 @@ tr {
 
 }
 
-div.priority{
-  border: none;
-  outline: none;
+.red.selected {
+  background-color: #ff0000;
+  color: white;
+}
+
+.orange.selected {
+  background-color: #ff9900;
+  color: white;
+}
+
+.green.selected {
+  background-color: #50c878;
+  color: white;
 }

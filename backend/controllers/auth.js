@@ -11,11 +11,13 @@ export const register = async (req,res,next) => {
     try {
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+        const verified = false;
     
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
           password: hashedPassword,
+          verified: verified
         });
     
         // WELCOME MAIL FUNCTION FROM UTILS

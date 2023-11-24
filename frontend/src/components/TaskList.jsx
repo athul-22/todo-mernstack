@@ -19,6 +19,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import TaskModal from "./TaskModal";
 
 // const StyledInput = styled('input')({
 //   '&.datetimepicker': {
@@ -49,10 +50,16 @@ function TaskList() {
   const [datetime, setDateTime] = useState("null");
   const [datetimeval, setDateTimeVal] = useState('');
   const [selectedPriority, setSelectedPriority] = useState("n"); // Add this state variable
-
-
-
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDateTimePickerOpen, setDateTimePickerOpen] = useState(false);
+
+  // TASK MODEL 
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
 
   const handleButtonClick = () => {
     setDateTimePickerOpen(!isDateTimePickerOpen);
@@ -218,7 +225,7 @@ function TaskList() {
                 {
                   <tbody style={{ justifyContent: "center" }}>
                     {taskList.map((task) => (
-                      <tr className="task-list" key={task._id}>
+                      <tr className="task-list" key={task._id} onClick={() => handleTaskClick(task)}>
                         <td
                           className="task-item"
                           style={{ display: "flex", paddingTop: "5px" }}
@@ -289,7 +296,13 @@ function TaskList() {
                     ))}
                   </tbody>
                 }
+                <TaskModal
+        open={isModalOpen}
+        handleClose={() => setIsModalOpen(false)}
+        taskDetails={selectedTask}
+      />
               </table>
+              
             ) : (
               <div>
                 <div

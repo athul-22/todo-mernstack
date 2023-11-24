@@ -9,6 +9,9 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8000',
       },
+      fs: {
+        allow: ['./'], // Adjust this to allow access to the required directories
+      },  
     },
   },
 });

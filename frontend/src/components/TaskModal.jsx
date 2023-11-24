@@ -14,6 +14,13 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
 
   const { title, priority, datetime } = taskDetails;
 
+  // Convert the datetime string to a JavaScript Date object
+  const dateObj = new Date(datetime);
+
+  // Get the date and time strings
+  const dateStr = dateObj.toLocaleDateString();
+  const timeStr = dateObj.toLocaleTimeString();
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -23,7 +30,6 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: 600,
-          
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 4,
@@ -38,7 +44,7 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
         </IconButton>
 
         <Typography variant="h6" component="div">
-        {title}
+          {title}
           {/* Priority Color */}
           <div
             style={{
@@ -46,30 +52,47 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
               height: "8px",
               backgroundColor: getPriorityColor(priority),
               borderRadius: "10px",
-              marginTop:'-1px',
-              marginLeft:'-2px'
+              marginTop: "-1px",
+              marginLeft: "-2px",
             }}
           ></div>
-         <div style={{display:'inline-flex',}}>
-         
-         </div>
         </Typography>
         <Typography variant="body2" color="text.secondary"></Typography>
-        <Typography variant="body2" color="text.secondary" style={{fontSize:'20px',marginTop:'-20px'}} >
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={{ fontSize: "20px", marginTop: "-20px" }}
+        >
           Priority: {priority}
         </Typography>
-        <Typography variant="body2" color="text.secondary" style={{fontSize:'20px'}}> 
-          Time: {datetime}
+        <Typography variant="body2" color="text.secondary" style={{ fontSize: "20px" }}>
+          Date: {dateStr}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" style={{ fontSize: "20px" }}>
+          Time: {timeStr}
         </Typography>
 
         {/* "Complete Task" and "Close" Buttons */}
         <Box mt={2} display="flex" justifyContent="space-between">
-          <Button onClick={handleComplete} variant="contained" style={{boxShadow: "#1890ff 0px 4px 16px 0px",
-                backgroundColor: "#1890ff",}}>
+          <Button
+            onClick={handleComplete}
+            variant="contained"
+            style={{
+              boxShadow: "#1890ff 0px 4px 16px 0px",
+              backgroundColor: "#1890ff",
+            }}
+          >
             Mark Completed
           </Button>
-          <Button onClick={handleClose} variant="contained" style={{color:'black',border:'1px solid black',
-                backgroundColor: "white"}}>
+          <Button
+            onClick={handleClose}
+            variant="contained"
+            style={{
+              color: 'black',
+              border: '1px solid black',
+              backgroundColor: "white",
+            }}
+          >
             Close
           </Button>
         </Box>

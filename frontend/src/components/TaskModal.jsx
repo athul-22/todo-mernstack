@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import EventIcon from "@mui/icons-material/Event";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
   // Add a conditional check to prevent accessing properties of null or undefined
@@ -17,14 +19,18 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
   // Convert the datetime string to a JavaScript Date object
   const dateObj = new Date(datetime);
 
-  // Get the date and time strings
-  const dateStr = dateObj.toLocaleDateString();
-  const timeStr = dateObj.toLocaleTimeString();
+  // Check if the date is valid
+  const isDateValid = !isNaN(dateObj.getTime());
+
+  // Get the date and time strings or display a message if invalid
+  const dateStr = isDateValid ? dateObj.toLocaleDateString() : "No date given";
+  const timeStr = isDateValid ? dateObj.toLocaleTimeString() : "No time given";
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
         sx={{
+          outline: "none",
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -32,6 +38,7 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
           width: 600,
           bgcolor: "background.paper",
           boxShadow: 24,
+          borderRadius: 3,
           p: 4,
         }}
       >
@@ -43,37 +50,79 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
           <CloseIcon />
         </IconButton>
 
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" component="div" style={{ fontSize: "30px" }}>
           {title}
+
           {/* Priority Color */}
           <div
             style={{
-              width: "40px",
-              height: "8px",
+              width:'30px',
+              height: "10px",
+              color: "",
               backgroundColor: getPriorityColor(priority),
               borderRadius: "10px",
-              marginTop: "-1px",
-              marginLeft: "-2px",
+              marginTop: "-5px",
+              marginLeft: "",
             }}
           ></div>
         </Typography>
         <Typography variant="body2" color="text.secondary"></Typography>
+        {/* <Typography
+          variant="body2"
+          color="text.secondary"
+          style={{ fontSize: "18px", marginTop: "5px" }}
+        >
+          Priority: {priority}
+        </Typography> */}
         <Typography
           variant="body2"
           color="text.secondary"
-          style={{ fontSize: "20px", marginTop: "-20px" }}
+
+          style={{
+           
+            display: "inline-flex",
+            justifyContent: "center",
+            fontSize: "18px",
+            marginTop: "20px",
+          }}
         >
-          Priority: {priority}
+          <EventIcon 
+          style={{
+              boxShadow: "#1890ff 0px 4px 16px 0px",
+              backgroundColor: "#1890ff",
+              color: "white",
+              height: "30px",
+              width: "30px",
+              borderRadius: "5px",
+              padding: "3px",
+              marginRight: "20px",
+            }}
+          /> {dateStr}
         </Typography>
-        <Typography variant="body2" color="text.secondary" style={{ fontSize: "20px" }}>
-          Date: {dateStr}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" style={{ fontSize: "20px" }}>
-          Time: {timeStr}
+        <br />
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          style={{ display: "inline-flex", fontSize: "18px",marginTop: "20px", }}
+        >
+          <AccessTimeIcon
+            style={{
+              boxShadow: "#1890ff 0px 4px 16px 0px",
+              backgroundColor: "#1890ff",
+              color: "white",
+              height: "30px",
+              width: "30px",
+              borderRadius: "5px",
+              padding: "3px",
+              marginRight: "20px",
+              
+            }}
+          />{" "}
+          {timeStr}
         </Typography>
 
         {/* "Complete Task" and "Close" Buttons */}
-        <Box mt={2} display="flex" justifyContent="space-between">
+        <Box mt={2} display="flex" justifyContent="space-between" style={{marginTop: "50px",}}> 
           <Button
             onClick={handleComplete}
             variant="contained"
@@ -88,8 +137,8 @@ const TaskModal = ({ open, handleClose, handleComplete, taskDetails }) => {
             onClick={handleClose}
             variant="contained"
             style={{
-              color: 'black',
-              border: '1px solid black',
+              color: "black",
+              border: "1px solid black",
               backgroundColor: "white",
             }}
           >

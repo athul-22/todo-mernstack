@@ -123,34 +123,24 @@ export default function Home() {
   const [verified, setVerified] = useState(false);
   const [autoAwesomeOpen, setAutoAwesomeOpen] = React.useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // State to control loading state when generating a task
-  const [loadingTask, setLoadingTask] = useState(false);
-  const [showSkeleton, setShowSkeleton] = useState(false);
+
 
   // AI MODEL OPEN
   const handleOpenAutoAwesome = () => {
-    setShowSkeleton(true);
     setAutoAwesomeOpen(true);
   };
 
   // AI MODEL CLOSE
   const handleCloseAutoAwesome = () => {
-    setShowSkeleton(false);
     setAutoAwesomeOpen(false);
   };
 
-  const handleGenerateTask = async () => {
-    // Trigger Skeleton display
-    setShowSkeleton(true);
-
-    // Simulate API call or any asynchronous task
-    // You should replace this with your actual API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Reset Skeleton visibility once the task is complete
-    setShowSkeleton(false);
-
+  const handleGenerateTask = () => {
+    // Add your logic to generate a task here
+    // For example, you can call an API or perform any other action
+    // ...
     toast.success("Task generated successfully");
+    handleCloseAutoAwesome();
   };
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
@@ -610,79 +600,61 @@ export default function Home() {
       </BootstrapDialogSettings>
 
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-
-      // Existing code ...
-
-<BootstrapDialogSettings
-  onClose={handleCloseAutoAwesome}
-  aria-labelledby="auto-awesome-dialog-title"
-  open={autoAwesomeOpen}
->
-  <IconButton
-    aria-label="close"
-    onClick={handleCloseAutoAwesome}
-    sx={{
-      position: "absolute",
-      right: 8,
-      top: 8,
-      color: (theme) => theme.palette.grey[10],
-    }}
-  >
-    <CloseIcon />
-  </IconButton>
-  <DialogContent
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      height: "auto",
-      width: "500px",
-      padding: "20px 20px 20px 20px",
-    }}
-  >
-    {/* "Generate Task" button */}
-    {!showSkeleton && (
-      <DialogActions>
-        <Button
-          style={{
-            color: "white",
-            boxShadow: "#1890ff 0px 4px 16px 0px",
-            backgroundColor: "#1890ff",
+      <BootstrapDialogSettings
+        onClose={handleCloseAutoAwesome}
+        aria-labelledby="auto-awesome-dialog-title"
+        open={autoAwesomeOpen}
+      >
+        {/* <DialogTitle sx={{ m: 0, p: 2 }} id="auto-awesome-dialog-title">
+          AI Task Generator 🤖
+        </DialogTitle> */}
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseAutoAwesome}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[10],
           }}
-          autoFocus
-          onClick={handleGenerateTask}
         >
-          Generate Task 🤖
-        </Button>
-      </DialogActions>
-    )}
-
-    {/* Skeleton rows */}
-    {showSkeleton &&
-       <>
-       <Skeleton variant="rectangular" width={400} height={50} />
-       <Skeleton variant="rectangular" width={400} height={50} />  
-       <Skeleton variant="rectangular" width={400} height={50} />
-       <Skeleton variant="rectangular" width={400} height={50} />
-       <Skeleton variant="rectangular" width={400} height={50} />
-     </>
-      }
-       <Button
+          <CloseIcon />
+        </IconButton>
+        <DialogContent
           style={{
-            color: "white",
-            boxShadow: "#1890ff 0px 4px 16px 0px",
-            backgroundColor: "#1890ff",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "auto",
+            width: "500px",
+            padding: "20px 20px 20px 20px",
           }}
-          autoFocus
-          onClick={handleGenerateTask}
         >
-          Generate Task 🤖
-        </Button>
-  </DialogContent>
-</BootstrapDialogSettings>
-
-
+          <Typography gutterBottom>
+            <img src={aibot} height="200px" width="auto" />
+            <br />
+            {/* <p style={{textAlign:'center'}}>AI Task Generator 🤖</p> */}
+            <DialogActions>
+              <Button
+                style={{
+                  color:'white',
+                  boxShadow: "#1890ff 0px 4px 16px 0px",
+                  backgroundColor: "#1890ff",
+                }}
+                autoFocus
+                onClick={handleGenerateTask}
+              >
+                Generate Task 🤖
+              </Button>
+            </DialogActions>
+          </Typography>
+        </DialogContent>
+        {/* <DialogActions>
+          <Button autoFocus onClick={handleGenerateTask}>
+            Generate Task
+          </Button>
+        </DialogActions> */}
+      </BootstrapDialogSettings>
     </ThemeProvider>
   );
 }

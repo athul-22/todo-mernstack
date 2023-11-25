@@ -40,7 +40,8 @@ import TaskList from "../components/TaskList";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import menai from "../images/menai.png";
-import Skeleton from "react-loading-skeleton";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import aibot from "../images/aibot.png";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
@@ -140,18 +141,18 @@ export default function Home() {
   };
 
   const handleGenerateTask = async () => {
-    // Trigger Skeleton display
+    // Set loading state to true to show Skeleton
+    setLoadingTask(true);
     setShowSkeleton(true);
-
     // Simulate API call or any asynchronous task
     // You should replace this with your actual API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Reset Skeleton visibility once the task is complete
-    setShowSkeleton(false);
-
+  
+  
+    // Reset loading state once the task is complete
+  
     toast.success("Task generated successfully");
   };
+  
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -658,16 +659,7 @@ export default function Home() {
       </DialogActions>
     )}
 
-    {/* Skeleton rows */}
-    {showSkeleton &&
-       <>
-       <Skeleton variant="rectangular" width={400} height={50} />
-       <Skeleton variant="rectangular" width={400} height={50} />  
-       <Skeleton variant="rectangular" width={400} height={50} />
-       <Skeleton variant="rectangular" width={400} height={50} />
-       <Skeleton variant="rectangular" width={400} height={50} />
-     </>
-      }
+
        <Button
           style={{
             color: "white",
@@ -679,6 +671,15 @@ export default function Home() {
         >
           Generate Task 🤖
         </Button>
+        {setShowSkeleton && (
+  <div>
+  <Skeleton variant="rectangular" width={400} height={50} />
+  <Skeleton variant="rectangular" width={400} height={50} />
+  <Skeleton variant="rectangular" width={400} height={50} />
+  <Skeleton variant="rectangular" width={400} height={50} />
+  <Skeleton variant="rectangular" width={400} height={50} />
+  </div>
+)}
   </DialogContent>
 </BootstrapDialogSettings>
 

@@ -40,8 +40,8 @@ import TaskList from "../components/TaskList";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import menai from "../images/menai.png";
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import aibot from "../images/aibot.png";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
@@ -141,18 +141,32 @@ export default function Home() {
   };
 
   const handleGenerateTask = async () => {
-    // Set loading state to true to show Skeleton
     setLoadingTask(true);
     setShowSkeleton(true);
-    // Simulate API call or any asynchronous task
-    // You should replace this with your actual API call
-  
-  
-    // Reset loading state once the task is complete
-  
-    toast.success("Task generated successfully");
+
+    try {
+      // Call your Google Palm API here to fetch tasks
+      // Example:
+      // const response = await axios.get("YOUR_API_ENDPOINT");
+      // const tasks = response.data;
+
+      // Simulating API call with setTimeout
+      setTimeout(() => {
+        // Update state to hide skeleton and stop loading
+        setShowSkeleton(false);
+        setLoadingTask(false);
+
+        // Fetch tasks and do something with them
+        // fetchTasks();
+      }, 4000); // show skeleton for 4 seconds
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+
+      // Update state to hide skeleton and stop loading in case of an error
+      setShowSkeleton(false);
+      setLoadingTask(false);
+    }
   };
-  
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -374,7 +388,6 @@ export default function Home() {
           {/* <Toolbar /> */}
         </Box>
       </Box>
-
       {/* ⭐️ WELCOME DIALOG BOX STARTS */}
       <BootstrapDialog
         onClose={handleClosesettings}
@@ -421,7 +434,6 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialog>
-
       {/*⭐️ SETTINGS MODEL */}
       <BootstrapDialogSettings
         onClose={handleClosesettings}
@@ -532,9 +544,7 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialogSettings>
-
       {/* ⭐️ ADD TASK */}
-
       <BootstrapDialogSettings
         onClose={handleCloseAddTask}
         aria-labelledby="customized-dialog-title"
@@ -609,81 +619,75 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialogSettings>
-
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-
       // Existing code ...
-
-<BootstrapDialogSettings
-  onClose={handleCloseAutoAwesome}
-  aria-labelledby="auto-awesome-dialog-title"
-  open={autoAwesomeOpen}
->
-  <IconButton
-    aria-label="close"
-    onClick={handleCloseAutoAwesome}
-    sx={{
-      position: "absolute",
-      right: 8,
-      top: 8,
-      color: (theme) => theme.palette.grey[10],
-    }}
-  >
-    <CloseIcon />
-  </IconButton>
-  <DialogContent
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      height: "auto",
-      width: "500px",
-      padding: "20px 20px 20px 20px",
-    }}
-  >
-    {/* "Generate Task" button */}
-    {!showSkeleton && (
-      <DialogActions>
-        <Button
-          style={{
-            color: "white",
-            boxShadow: "#1890ff 0px 4px 16px 0px",
-            backgroundColor: "#1890ff",
+      <BootstrapDialogSettings
+        onClose={handleCloseAutoAwesome}
+        aria-labelledby="auto-awesome-dialog-title"
+        open={autoAwesomeOpen}
+      >
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseAutoAwesome}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[10],
           }}
-          autoFocus
-          onClick={handleGenerateTask}
         >
-          Generate Task 🤖
-        </Button>
-      </DialogActions>
-    )}
-
-
-       <Button
+          <CloseIcon />
+        </IconButton>
+        <DialogContent
           style={{
-            color: "white",
-            boxShadow: "#1890ff 0px 4px 16px 0px",
-            backgroundColor: "#1890ff",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "auto",
+            width: "500px",
+            padding: "20px 20px 20px 20px",
           }}
-          autoFocus
-          onClick={handleGenerateTask}
         >
-          Generate Task 🤖
-        </Button>
-        {setShowSkeleton && (
-  <div>
-  <Skeleton variant="rectangular" width={400} height={50} />
-  <Skeleton variant="rectangular" width={400} height={50} />
-  <Skeleton variant="rectangular" width={400} height={50} />
-  <Skeleton variant="rectangular" width={400} height={50} />
-  <Skeleton variant="rectangular" width={400} height={50} />
-  </div>
-)}
-  </DialogContent>
-</BootstrapDialogSettings>
+          {/* "Generate Task" button */}
+          {!showSkeleton && (
+            <DialogActions>
+              <Button
+                style={{
+                  color: "white",
+                  boxShadow: "#1890ff 0px 4px 16px 0px",
+                  backgroundColor: "#1890ff",
+                }}
+                autoFocus
+                onClick={handleGenerateTask}
+              >
+                Generate Task 🤖
+              </Button>
+            </DialogActions>
+          )}
 
-
+          <Button
+            style={{
+              color: "white",
+              boxShadow: "#1890ff 0px 4px 16px 0px",
+              backgroundColor: "#1890ff",
+            }}
+            autoFocus
+            onClick={handleGenerateTask}
+          >
+            Generate Task 🤖
+          </Button>
+          {setShowSkeleton && (
+            <div>
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+            </div>
+          )}
+        </DialogContent>
+      </BootstrapDialogSettings>
     </ThemeProvider>
   );
 }

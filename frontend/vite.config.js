@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,7 +11,10 @@ export default defineConfig({
       },
       fs: {
         allow: ['./'], // Adjust this to allow access to the required directories
-      },  
+      },
     },
+  },
+  optimizeDeps: {
+    include: ['moment', 'lodash'], // Add the external dependencies here
   },
 });

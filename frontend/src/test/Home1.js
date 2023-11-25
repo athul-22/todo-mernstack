@@ -41,7 +41,6 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import menai from "../images/menai.png";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import aibot from "../images/aibot.png";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
@@ -124,48 +123,24 @@ export default function Home() {
   const [verified, setVerified] = useState(false);
   const [autoAwesomeOpen, setAutoAwesomeOpen] = React.useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // State to control loading state when generating a task
-  const [loadingTask, setLoadingTask] = useState(false);
-  const [showSkeleton, setShowSkeleton] = useState(false);
+
 
   // AI MODEL OPEN
   const handleOpenAutoAwesome = () => {
-    setShowSkeleton(true);
     setAutoAwesomeOpen(true);
   };
 
   // AI MODEL CLOSE
   const handleCloseAutoAwesome = () => {
-    setShowSkeleton(false);
     setAutoAwesomeOpen(false);
   };
 
-  const handleGenerateTask = async () => {
-    setLoadingTask(true);
-    setShowSkeleton(true);
-
-    try {
-      // Call your Google Palm API here to fetch tasks
-      // Example:
-      // const response = await axios.get("YOUR_API_ENDPOINT");
-      // const tasks = response.data;
-
-      // Simulating API call with setTimeout
-      setTimeout(() => {
-        // Update state to hide skeleton and stop loading
-        setShowSkeleton(false);
-        setLoadingTask(false);
-
-        // Fetch tasks and do something with them
-        // fetchTasks();
-      }, 4000); // show skeleton for 4 seconds
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-
-      // Update state to hide skeleton and stop loading in case of an error
-      setShowSkeleton(false);
-      setLoadingTask(false);
-    }
+  const handleGenerateTask = () => {
+    // Add your logic to generate a task here
+    // For example, you can call an API or perform any other action
+    // ...
+    toast.success("Task generated successfully");
+    handleCloseAutoAwesome();
   };
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
@@ -388,6 +363,7 @@ export default function Home() {
           {/* <Toolbar /> */}
         </Box>
       </Box>
+
       {/* ⭐️ WELCOME DIALOG BOX STARTS */}
       <BootstrapDialog
         onClose={handleClosesettings}
@@ -434,6 +410,7 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialog>
+
       {/*⭐️ SETTINGS MODEL */}
       <BootstrapDialogSettings
         onClose={handleClosesettings}
@@ -544,7 +521,9 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialogSettings>
+
       {/* ⭐️ ADD TASK */}
+
       <BootstrapDialogSettings
         onClose={handleCloseAddTask}
         aria-labelledby="customized-dialog-title"
@@ -619,14 +598,16 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialogSettings>
+
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      // Existing code ...
       <BootstrapDialogSettings
         onClose={handleCloseAutoAwesome}
         aria-labelledby="auto-awesome-dialog-title"
         open={autoAwesomeOpen}
       >
+        {/* <DialogTitle sx={{ m: 0, p: 2 }} id="auto-awesome-dialog-title">
+          AI Task Generator 🤖
+        </DialogTitle> */}
         <IconButton
           aria-label="close"
           onClick={handleCloseAutoAwesome}
@@ -642,19 +623,21 @@ export default function Home() {
         <DialogContent
           style={{
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
             height: "auto",
             width: "500px",
             padding: "20px 20px 20px 20px",
           }}
         >
-          {/* "Generate Task" button */}
-          {!showSkeleton && (
+          <Typography gutterBottom>
+            <img src={aibot} height="200px" width="auto" />
+            <br />
+            {/* <p style={{textAlign:'center'}}>AI Task Generator 🤖</p> */}
             <DialogActions>
               <Button
                 style={{
-                  color: "white",
+                  color:'white',
                   boxShadow: "#1890ff 0px 4px 16px 0px",
                   backgroundColor: "#1890ff",
                 }}
@@ -664,29 +647,13 @@ export default function Home() {
                 Generate Task 🤖
               </Button>
             </DialogActions>
-          )}
-
-          <Button
-            style={{
-              color: "white",
-              boxShadow: "#1890ff 0px 4px 16px 0px",
-              backgroundColor: "#1890ff",
-            }}
-            autoFocus
-            onClick={handleGenerateTask}
-          >
-            Generate Task 🤖
-          </Button>
-          {setShowSkeleton && (
-            <div>
-              <Skeleton variant="rectangular" width={400} height={50} />
-              <Skeleton variant="rectangular" width={400} height={50} />
-              <Skeleton variant="rectangular" width={400} height={50} />
-              <Skeleton variant="rectangular" width={400} height={50} />
-              <Skeleton variant="rectangular" width={400} height={50} />
-            </div>
-          )}
+          </Typography>
         </DialogContent>
+        {/* <DialogActions>
+          <Button autoFocus onClick={handleGenerateTask}>
+            Generate Task
+          </Button>
+        </DialogActions> */}
       </BootstrapDialogSettings>
     </ThemeProvider>
   );

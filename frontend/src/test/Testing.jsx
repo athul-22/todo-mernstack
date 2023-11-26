@@ -1,9 +1,9 @@
-import React from 'react'
+import ToDoSuggestion from '../components/ToDoSuggestion'
 
 const Testing = () => {
   return (
     <div>
-      
+      <ToDoSuggestion/>
     </div>
   )
 }

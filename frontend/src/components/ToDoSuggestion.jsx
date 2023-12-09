@@ -1,38 +1,59 @@
-import { config } from "dotenv";
-config();
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-import { Configuration, OpenAIApi } from "openai";
+const App = () => {
+  const [prompt, setPrompt] = useState('');
+  const [response, setResponse] = useState('');
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+  useEffect(() => {
+    // Send request to PaLM API with the prompt on submit
+    const submitPrompt = async () => {
+      const apiKey = 'AIzaSyBZmmyAqMuALKBvpPrjBZYEhjHJcfOIdQ4'; // Replace with your PaLM API key
+      const url = `https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage`;
+      const data = {
+        prompt: {
+          context: '',
+          examples: [],
+          messages: [{ content: prompt }],
+        },
+        temperature: 0.25,
+        top_k: 40,
+        top_p: 0.95,
+        candidate_count: 1,
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      };
 
-async function chat(input) {
-  const messages = [{ role: "user", content: input }];
+      try {
+        const axiosResponse = await axios.post(url, data, { headers });
+        console.log('Request:', data); // Print request for debugging
+        console.log('Response:', axiosResponse); // Print response for debugging
+        setResponse(axiosResponse.data.generated_text[0].text);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const response = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: messages,
-    temperature: 0,
-  });
+    if (prompt) {
+      submitPrompt();
+    }
+  }, [prompt]);
 
-  return response.data.choices[0].message.content;
-}
+  return (
+    <div>
+      <h1>PaLM API Integration with React JS</h1>
+      <input
+        type="text"
+        placeholder="Enter your prompt..."
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+      />
+      <button onClick={() => setPrompt('')}>Clear Prompt</button>
+      {response && <p>Response: {response}</p>}
+    </div>
+  );
+};
 
-const question = "suggest me some 5 random task to do";
-
-chat(question)
-  .then((response) => console.log(response))
-  .catch((error) => console.error(error));
-
-const promptTemplate = `
-  Be very funny when answering questions
-  Question: {question}
-  `;
-
-const prompt = promptTemplate.replace("{question}", question);
-
-chat(prompt)
-  .then((response) => console.log(response))
-  .catch((error) => console.error(error));
+export default App;

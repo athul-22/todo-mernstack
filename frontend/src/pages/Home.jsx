@@ -314,6 +314,7 @@ export default function Home() {
                 <Badge
                   style={{
                     backgroundColor: "#1890ff",
+                    height:'50px',
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",

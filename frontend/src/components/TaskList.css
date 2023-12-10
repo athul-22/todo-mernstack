@@ -78,7 +78,7 @@ table {
 
 /* Style the task title */
 .task-title {
-  padding-left: 20px;
+  margin-left: 20px;
   font-size: 20px;
 }
 

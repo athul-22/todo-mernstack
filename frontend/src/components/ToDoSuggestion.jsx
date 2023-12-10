@@ -12,8 +12,8 @@ const App = () => {
       const url = `https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage`;
       const data = {
         prompt: {
-          context: '',
-          examples: [],
+          context: 'give me fun based task to do',
+          examples: ['plant 10 trees','connect with 50 people on linkedin'],
           messages: [{ content: prompt }],
         },
         temperature: 0.25,

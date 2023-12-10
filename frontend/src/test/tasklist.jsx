@@ -167,12 +167,12 @@ function TaskList() {
 
   // const inputChange = () => {
   //   let inputTaskValue = document.getElementsByClassName('taskinput').value;
-
   // }
 
   return (
-    <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
-       
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <button onClick={() => console.log("FILTER clicked")}>FILTER</button>
+      <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
         <div>
         
@@ -184,11 +184,12 @@ function TaskList() {
               marginTop: "50px",
               height: "550px",
               overflowY: "scroll",
+              
             }}
           >
             {taskList.length > 0 ? (
               <table>
-                 <div>test</div>
+               
                 {
                   <tbody style={{ justifyContent: "center" }}>
                    
@@ -369,6 +370,7 @@ function TaskList() {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

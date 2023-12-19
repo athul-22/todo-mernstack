@@ -41,41 +41,118 @@ export const currentUserTasks = async(req,res,next) => {
     }
 }
 
-export const updateTask = async(req,res,next) => {
-    try{
-        const task = await Task.findById(req.params.taskId).exec();
-        if(!task){
-            return next(createError({status:404,message:"No task found"}));
-        }
-        if(task.user.toString() !== req.user.id){
-            return next(createError({status:401,message:"Task not associated with your profile"}));
-        }
+// export const updateTask = async(req,res,next) => {
+//     try{
+//         const task = await Task.findById(req.params.taskId).exec();
+//         if(!task){
+//             return next(createError({status:404,message:"No task found"}));
+//         }
+//         if(task.user.toString() !== req.user.id){
+//             return next(createError({status:401,message:"Task not associated with your profile"}));
+//         }
 
-        const updateTask = await Task.findByIdAndUpdate(req.params.taskId, {
-            title:req.body.title,
-            completed: req.body.completed
-        },{
-            new:true
+//         const updateTask = await Task.findByIdAndUpdate(req.params.taskId, {
+//             title:req.body.title,
+//             completed: req.body.completed
+//         },{
+//             new:true
+//         });
+//         return res.status(200).json(updateTask);
+//     }
+//     catch(err){
+//         return next(err);
+//     }
+// }
+
+export const updateTask = async (req, res, next) => {
+    try {
+      const taskId = req.params.taskId;
+      const task = await Task.findById(taskId).exec();
+  
+      if (!task) {
+        return next(createError({ status: 404, message: "No task found" }));
+      }
+  
+      if (task.user.toString() !== req.user.id) {
+        return next(createError({ status: 401, message: "Task not associated with your profile" }));
+      }
+  
+      // Check if the task is completed
+      if (req.body.completed) {
+        // Move the task to completed tasks section
+        const completedTask = new CompletedTask({
+          title: task.title,
+          user: req.user.id,
+          // Copy other fields as needed
         });
-        return res.status(200).json(updateTask);
+  
+        await completedTask.save();
+  
+        // Remove the task from the main tasks
+        await Task.findByIdAndDelete(taskId);
+  
+        return res.status(200).json(completedTask);
+      } else {
+        // Update the task if it's not completed
+        const updatedTask = await Task.findByIdAndUpdate(taskId, {
+          title: req.body.title,
+          completed: req.body.completed,
+        }, {
+          new: true,
+        });
+  
+        return res.status(200).json(updatedTask);
+      }
+    } catch (err) {
+      return next(err);
     }
-    catch(err){
-        return next(err);
-    }
-}
+  };
+  
 
-export const deleteTask = async(req,res,next) => {
-    try{
-        const task = await Task.findById(req.params.taskId).exec();
-        if(!task){
-            return next(createError({status:404,message:"No task found"}));
-        }
-        if(task.user.toString() !== req.user.id){
-            return next(createError({status:401,message:"Task not associated with your profile"}));
-        }
-        await Task.findByIdAndDelete(req.params.taskId);
-        return res.status(200).json('Task deleted successfully');
-    }catch(error){
-        return next(error)
+// export const deleteTask = async(req,res,next) => {
+//     try{
+//         const task = await Task.findById(req.params.taskId).exec();
+//         if(!task){
+//             return next(createError({status:404,message:"No task found"}));
+//         }
+//         if(task.user.toString() !== req.user.id){
+//             return next(createError({status:401,message:"Task not associated with your profile"}));
+//         }
+//         await Task.findByIdAndDelete(req.params.taskId);
+//         return res.status(200).json('Task deleted successfully');
+//     }catch(error){
+//         return next(error)
+//     }
+// }
+
+
+export const deleteTask = async (req, res, next) => {
+    try {
+      const taskId = req.params.taskId;
+      const task = await Task.findById(taskId).exec();
+  
+      if (!task) {
+        return next(createError({ status: 404, message: "No task found" }));
+      }
+  
+      if (task.user.toString() !== req.user.id) {
+        return next(createError({ status: 401, message: "Task not associated with your profile" }));
+      }
+  
+      // Move the task to completed tasks section
+      const completedTask = new CompletedTask({
+        title: task.title,
+        user: req.user.id,
+        // Copy other fields as needed
+      });
+  
+      await completedTask.save();
+  
+      // Remove the task from the main tasks
+      await Task.findByIdAndDelete(taskId);
+  
+      return res.status(200).json('Task deleted successfully');
+    } catch (error) {
+      return next(error);
     }
-}
+  };

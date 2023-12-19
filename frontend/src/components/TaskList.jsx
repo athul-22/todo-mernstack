@@ -1,68 +1,41 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { styled } from '@mui/system';
 import axios from "axios";
-import { Button } from "@mui/material";
 import "./TaskList.css";
 import BodyNoTask from "../images/boynotask.png";
-// import TaskItem from "./TaskItem";
 import toast from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
-import Task from "../../../backend/models/Task";
-import dayjs, { Dayjs } from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import dayjs from "dayjs";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import TaskModal from "./TaskModal";
-
-// const StyledInput = styled('input')({
-//   '&.datetimepicker': {
-//     border: 'none',
-//     width: '5%',
-//     color: 'red',
-//   },
-// });
-
-
-// const useStyles = makeStyles({
-//   // Define a class to override the border style
-//   noBorder: {
-//     border: 'none',
-//   },
-// });
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
-  const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([]);
-  const [addNewTask, setAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState("");
-  const [isCompleted, setIsCompleted] = useState(task.completed);
   const [isLoading, setIsLoading] = useState(false);
-  const [ipFocused, setipFocused] = useState(false);
   const [priority, setPriority] = useState("n");
-  const [datetime, setDateTime] = useState("null");
-  const [datetimeval, setDateTimeVal] = useState('');
-  const [selectedPriority, setSelectedPriority] = useState("n"); // Add this state variable
+  const [datetimeval, setDateTimeVal] = useState("");
+  const [selectedPriority, setSelectedPriority] = useState("n");
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDateTimePickerOpen, setDateTimePickerOpen] = useState(false);
+  const [priorityFilter, setPriorityFilter] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
 
-  // TASK MODEL 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
     setIsModalOpen(true);
   };
 
-
   const handleButtonClick = () => {
-    setDateTimePickerOpen(!isDateTimePickerOpen);
+    // Handle button click
   };
 
   useEffect(() => {
@@ -79,8 +52,7 @@ function TaskList() {
 
     try {
       const formattedDate = dayjs(datetimeval).format("YYYY-MM-DD");
-      const formattedTime = dayjs(datetimeval).format("HH:mm:ss.SSS[Z]"); // Note the format change here
-      console.log(formattedDate, "formatted date");
+      const formattedTime = dayjs(datetimeval).format("HH:mm:ss.SSS[Z]");
 
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
@@ -93,7 +65,6 @@ function TaskList() {
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
       setNewTask("");
-
     } catch (error) {
       console.log(error);
     }
@@ -114,37 +85,11 @@ function TaskList() {
     try {
       await axios.delete(`/api/tasks/${id}`);
       toast.success("Task deleted successfully");
-      setTaskList(taskList.filter((task) => task._id != id));
+      setTaskList(taskList.filter((task) => task._id !== id));
     } catch (err) {
       console.log(err);
     }
   };
-
-  // const handleAddTask = () => {
-  //   if (task) {
-  //     setTasks([...tasks, task]);
-  //     setTask("");
-  //   }
-  // };
-
-  // ⭐️ OLD CHECKED BOX FUNCTION
-
-  // const handleCheckboxClick = async (task) => {
-
-  //   setIsLoading(true);
-
-  //   try {
-  //     await axios.put(`/api/tasks/${task._id}`, {
-  //       completed: !task.isCompleted,
-  //     });
-  //     toast.success("Task updated successfully");
-  //   } catch (err) {
-  //     console.log(err);
-  //     toast.error("Something went wrong");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const handleCheckboxClick = async (clickedTask) => {
     setIsLoading(true);
@@ -161,9 +106,6 @@ function TaskList() {
         completed: !clickedTask.isCompleted,
       });
 
-      console.log(clickedTask);
-      console.log(clickedTask.isCompleted);
-
       setTaskList(updatedTasks);
 
       await updateTaskCompletionStatus(
@@ -177,14 +119,21 @@ function TaskList() {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
+
+      // Open the modal after updating the task
+      handleTaskClick(clickedTask);
     }
   };
 
-  //UPDATE TASK FUNCTION
+  const handleCloseIconClick = () => {
+    // Close the modal when the close icon is clicked
+    setIsModalOpen(false);
+
+    // Optionally, you can perform additional actions here
+  };
+
   const updateTaskCompletionStatus = async (taskId, isCompleted) => {
     try {
-      // Make an API call to your backend to update the task completion status
-      // Example using fetch:
       await fetch(`/api/tasks/${taskId}`, {
         method: "PUT",
         headers: {
@@ -192,22 +141,58 @@ function TaskList() {
         },
         body: JSON.stringify({ completed: isCompleted }),
       });
-      // Handle success response if needed
     } catch (error) {
-      // Handle error
       console.error("Error updating task completion status:", error);
-      throw error; // Throw the error to handle it in the click handler
+      throw error;
     }
   };
 
-  // const inputChange = () => {
-  //   let inputTaskValue = document.getElementsByClassName('taskinput').value;
+  const handleChangeselectpriority = (event) => {
+    setPriorityFilter(event.target.value);
+  };
 
-  // }
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
 
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   return (
     <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
+      <div className="filter">
+        <InputLabel id="priority-filter-label" style={{ color: "white" }}>
+          Priority
+        </InputLabel>
+        <Select
+          labelId="priority-filter-label"
+          id="demo-simple-select"
+          value={priorityFilter}
+          label="Priority"
+          onChange={handleChangeselectpriority}
+          style={{
+            float: "right",
+            marginRight: "450px",
+            height: "50px",
+            width: "auto",
+            color: "white",
+            marginTop: "-85px",
+            backgroundColor: "#1890ff",
+            border: "none",
+            outline: "none",
+            borderRadius: "5px",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "#1890ff 0px 4px 16px 0px",
+          }}
+        >
+          <MenuItem value="">⚡️ All</MenuItem>
+          <MenuItem value="h">🔺 HIGH</MenuItem>
+          <MenuItem value="m">🔸 MEDIUM</MenuItem>
+          <MenuItem value="l">❇️ LOW</MenuItem>
+        </Select>
+      </div>
       <div style={{ flex: 1, overflowY: "auto" }}>
         <div>
           <div
@@ -224,85 +209,85 @@ function TaskList() {
               <table>
                 {
                   <tbody style={{ justifyContent: "center" }}>
-                    {taskList.map((task) => (
-                      <tr className="task-list" key={task._id} onClick={() => handleTaskClick(task)}>
-                        <td
-                          className="task-item"
-                          style={{ display: "flex", paddingTop: "5px" }}
+                    {taskList
+                      .filter((task) =>
+                        priorityFilter ? task.priority === priorityFilter : true
+                      )
+                      .map((task) => (
+                        <tr
+                          className={`task-list ${
+                            isHovered ? "hover-disabled" : ""
+                          }`}
+                          key={task._id}
+                          // onClick={() => handleTaskClick(task)}
+                          onMouseEnter={handleMouseEnter}
+                          onMouseLeave={handleMouseLeave}
                         >
-                          {/* <input
-                            className="task-checkbox"
-                            type="checkbox"
-                            checked={isCompleted}
-                            onChange={handleCheckboxClick}
-                            onClick={handleCheckboxClick(task.id)}
-                          /> */}
-
-                          <div
-                            onChange={() => handleCheckboxClick(task)}
-                            role="checkbox"
-                            aria-checked
+                          <td
+                            className="task-item"
+                            style={{ display: "flex", paddingTop: "5px" }}
                           >
-                            <input
-                              className="task-checkbox"
-                              type="checkbox"
-                              checked={task.isCompleted}
-                              disabled={isLoading}
-                              readOnly
-                              tabIndex={-1}
+                            <div
+                              onChange={() => handleCheckboxClick(task)}
+                              role="checkbox"
+                              aria-checked
+                            >
+                              <input
+                                className="task-checkbox"
+                                type="checkbox"
+                                checked={task.isCompleted}
+                                disabled={isLoading}
+                                readOnly
+                                tabIndex={-1}
+                              />
+                            </div>
+                            <div onClick={() => handleTaskClick(task)}>
+                              <p
+                                className="task-title"
+                                style={{
+                                  textDecoration: task.isCompleted
+                                    ? "line-through"
+                                    : "none",
+                                  color: task.isCompleted ? "grey" : "black",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {task.title}
+                              </p>
+                            </div>
+                            <div
+                              className={`priority-box ${task.priority}`}
+                            ></div>
+                          </td>
+
+                          <td>
+                            <ClearIcon
+                              className="task-delete-btn"
+                              onClick={() => deleteTask(task._id)}
+                              style={{
+                                color: "black",
+                                backgroundColor: "#f5f5f5",
+                                alignContent: "center",
+                                fontSize: "10px",
+                                marginRight: "20px",
+                                height: "35px",
+                                width: "35px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
                             />
-                          </div>
-
-                          <p
-                            className="task-title"
-                            style={{
-                              textDecoration: task.isCompleted
-                                ? "line-through"
-                                : "none",
-                              color: task.isCompleted ? "grey" : "black",
-                            }}
-                          >
-                            {task.title}
-                          </p>
-
-                          {/* TASK PRIORITY COLOUR BOX  */}
-
-                          <div
-                            className={`priority-box ${task.priority}`}
-                          ></div>
-                        </td>
-                        <td>
-                          {/* <button onClick={() => deleteTask(task._id)} className="task-delete-btn">
-                          Delete
-                        </button> */}
-                          <ClearIcon
-                            className="task-delete-btn"
-                            onClick={() => deleteTask(task._id)}
-                            style={{
-                              color: "black",
-                              backgroundColor: "#f5f5f5",
-                              alignContent: "center",
-                              fontSize: "10px",
-                              marginRight: "20px",
-                              height: "35px",
-                              width: "35px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 }
                 <TaskModal
-        open={isModalOpen}
-        handleClose={() => setIsModalOpen(false)}
-        taskDetails={selectedTask}
-      />
+                  open={isModalOpen}
+                  handleClose={handleCloseIconClick}
+                  taskDetails={selectedTask}
+                />
               </table>
-              
             ) : (
               <div>
                 <div
@@ -323,7 +308,7 @@ function TaskList() {
                     color: "grey",
                   }}
                 >
-                  All Tasks are completed ! 🎉
+                  All Tasks are completed! 🎉
                 </p>
               </div>
             )}
@@ -332,41 +317,6 @@ function TaskList() {
           <div className="footer">
             {newTask && (
               <div>
-
-                {/* DATE TIME OLD */}
-                {/* <div className="datetime">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {newTask && (
-                      <DateTimePicker
-                        className="datetimepicker"
-                        // label="Choose Date and Time"
-                        placeholder=""
-                        value={datetime}
-                        onChange={(newValue) => setDateTime(newValue)}
-                        renderInput={(props) => (
-                          <StyledInput
-                            {...props}
-                            className="datetimepicker"
-                            style={{ width: '5%', color: 'red' }}
-                          />
-                        )}
-                      />
-                    )}
-
-                  </LocalizationProvider>
-                </div> */}
-
-                {/* <div className="priority">
-                  <button  className="red" onClick={() => setPriority("h")}>
-                    High Priority
-                  </button>
-                  <button className="orange" onClick={() => setPriority("m")}>
-                    Medium Priority
-                  </button>
-                  <button className="green" onClick={() => setPriority("l")}>
-                    Low Priority
-                  </button>
-                </div> */}
                 <div className="priority">
                   <div>
                     <DatePicker
@@ -380,7 +330,7 @@ function TaskList() {
                       popperPlacement="bottom-start"
                       popperModifiers={{
                         flip: {
-                          behavior: ['bottom'],
+                          behavior: ["bottom"],
                         },
                         preventOverflow: {
                           enabled: false,
@@ -395,7 +345,9 @@ function TaskList() {
                     />
                   </div>
                   <button
-                    className={`red ${selectedPriority === "h" ? "selected" : ""}`}
+                    className={`red ${
+                      selectedPriority === "h" ? "selected" : ""
+                    }`}
                     onClick={() => {
                       setPriority("h");
                       setSelectedPriority("h");
@@ -404,8 +356,9 @@ function TaskList() {
                     High Priority
                   </button>
                   <button
-                    className={`orange ${selectedPriority === "m" ? "selected" : ""
-                      }`}
+                    className={`orange ${
+                      selectedPriority === "m" ? "selected" : ""
+                    }`}
                     onClick={() => {
                       setPriority("m");
                       setSelectedPriority("m");
@@ -414,8 +367,9 @@ function TaskList() {
                     Medium Priority
                   </button>
                   <button
-                    className={`green ${selectedPriority === "l" ? "selected" : ""
-                      }`}
+                    className={`green ${
+                      selectedPriority === "l" ? "selected" : ""
+                    }`}
                     onClick={() => {
                       setPriority("l");
                       setSelectedPriority("l");
@@ -429,7 +383,6 @@ function TaskList() {
 
             <input
               value={newTask}
-              // onChange={inputChange}
               onChange={(e) => {
                 setNewTask(e.target.value);
               }}
@@ -438,7 +391,6 @@ function TaskList() {
               placeholder="Task Title"
               type="text"
               className="taskinput"
-              // placeholder="Add Task"
               style={{
                 cursor: "pointer",
                 fontSize: "17px",
@@ -454,7 +406,6 @@ function TaskList() {
               style={{
                 cursor: "pointer",
                 fontSize: "17px",
-
                 boxShadow: "#1890ff 0px 4px 16px 0px",
                 backgroundColor: "#1890ff",
                 color: "white",
@@ -473,8 +424,22 @@ function TaskList() {
 }
 
 const CustomCalendarIcon = React.forwardRef(({ value, onClick }, ref) => (
-  <CalendarTodayIcon  onClick={onClick} color="white" style={{marginRight:'30px',marginTop:'-5px',backgroundColor:"#1890ff",color:'white',height:'50px',width:'50px',padding:'10px',boxShadow: "#1890ff 0px 4px 16px 0px",borderRadius:'10px'}} ref={ref} />
+  <CalendarTodayIcon
+    onClick={onClick}
+    color="white"
+    style={{
+      marginRight: "30px",
+      marginTop: "-5px",
+      backgroundColor: "#1890ff",
+      color: "white",
+      height: "50px",
+      width: "50px",
+      padding: "10px",
+      boxShadow: "#1890ff 0px 4px 16px 0px",
+      borderRadius: "10px",
+    }}
+    ref={ref}
+  />
 ));
-
 
 export default TaskList;

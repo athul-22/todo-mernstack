@@ -294,6 +294,7 @@ export default function Home() {
             </div>
             <div className="top_today">{todayDate}</div>
 
+
             <div className="top-right">
               {/* <IconButton color="inherit" style={{ backgroundColor: "white",
                     height: "50px",
@@ -313,7 +314,7 @@ export default function Home() {
                 <Badge
                   style={{
                     backgroundColor: "#1890ff",
-                    height: "50px",
+                    height:'50px',
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",
@@ -383,10 +384,16 @@ export default function Home() {
               </IconButton> */}
             </div>
           </div>
+          
           <TaskList />
+          
 
           {/* <Toolbar /> */}
         </Box>
+
+       
+
+       
       </Box>
       {/* ⭐️ WELCOME DIALOG BOX STARTS */}
       <BootstrapDialog
@@ -519,6 +526,8 @@ export default function Home() {
           </div>
           <br />
 
+         
+
           <div style={{ display: "flex", justifyContent: "center" }}>
             {/* <button
               onClick={handleLogout}
@@ -621,7 +630,7 @@ export default function Home() {
       </BootstrapDialogSettings>
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      // Existing code ...
+      
       <BootstrapDialogSettings
         onClose={handleCloseAutoAwesome}
         aria-labelledby="auto-awesome-dialog-title"

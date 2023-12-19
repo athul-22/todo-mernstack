@@ -28,6 +28,7 @@ function TaskList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("");
   const [isHovered, setIsHovered] = useState(false);
+  const [completedTasks, setCompletedTasks] = useState([])
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -81,15 +82,49 @@ function TaskList() {
     }
   };
 
+  // const deleteTask = async (id) => {
+  //   try {
+  //     await axios.patch(`/api/tasks/${id}`);
+  //     // toast.success("Task deleted successfully");
+  //     toast.success("Task deleted successfully");
+  //     setTaskList(taskList.filter((task) => task._id !== id));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+
+
+  // const deleteTask = async (id) => {
+  //   try {
+  //     await axios.delete(`/api/tasks/${id}`);
+  //     toast.success("Task deleted successfully");
+  
+  //     // Find the task in the taskList
+  //     const deletedTask = taskList.find((task) => task._id === id);
+  
+  //     // Move the deleted task to the completed tasks section
+  //     setCompletedTasks([deletedTask, ...completedTasks]);
+  
+  //     // Remove the task from the main taskList
+  //     setTaskList(taskList.filter((task) => task._id !== id));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`/api/tasks/${id}`);
-      toast.success("Task deleted successfully");
+      await axios.delete(`/api/tasks/move-to-completed/${id}`);
+      toast.success("Task Removed successfully");
+      // Remove the task from the main taskList (optional, as the backend already handles it)
       setTaskList(taskList.filter((task) => task._id !== id));
     } catch (err) {
       console.log(err);
     }
   };
+  
+  
 
   const handleCheckboxClick = async (clickedTask) => {
     setIsLoading(true);

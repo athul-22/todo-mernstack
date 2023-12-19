@@ -1,5 +1,6 @@
 import Task from '../models/Task.js'
 import createError from '../utils/errors.js'
+import CompletedTask from '../models/CompletedTask.js'
 
 export const createTask = async(req,res,next) => {
 
@@ -125,34 +126,100 @@ export const updateTask = async (req, res, next) => {
 //     }
 // }
 
+// 🌟 DELETE TASK FUNCTION
+// export const deleteTask = async (req, res, next) => {
+//     try {
+//       const taskId = req.params.taskId;
+//       const task = await Task.findById(taskId).exec();
+  
+//       if (!task) {
+//         return next(createError({ status: 404, message: "No task found" }));
+//       }
+  
+//       if (task.user.toString() !== req.user.id) {
+//         return next(createError({ status: 401, message: "Task not associated with your profile" }));
+//       }
+  
+//       // Move the task to completed tasks section
+//       const completedTask = new CompletedTask({
+//         title: task.title,
+//         user: req.user.id,
+//         // Copy other fields as needed
+//       });
+  
+//       await completedTask.save();
+  
+//       // Remove the task from the main tasks
+//       await Task.findByIdAndDelete(taskId);
+  
+//       return res.status(200).json('Task deleted successfully');
+//     } catch (error) {
+//       return next(error);
+//     }
+//   };
 
-export const deleteTask = async (req, res, next) => {
-    try {
-      const taskId = req.params.taskId;
-      const task = await Task.findById(taskId).exec();
+  //DELETE TASK TO MOVE TO COMPLETED
+//   export const moveToCompletedTasks = async (req, res, next) => {
+//     try {
+//       const taskId = req.params.taskId;
+//       const task = await Task.findById(taskId).exec();
   
-      if (!task) {
-        return next(createError({ status: 404, message: "No task found" }));
-      }
+//       if (!task) {
+//         return next(createError({ status: 404, message: "No task found" }));
+//       }
   
-      if (task.user.toString() !== req.user.id) {
-        return next(createError({ status: 401, message: "Task not associated with your profile" }));
-      }
+//       if (task.user.toString() !== req.user.id) {
+//         return next(createError({ status: 401, message: "Task not associated with your profile" }));
+//       }
   
-      // Move the task to completed tasks section
-      const completedTask = new CompletedTask({
-        title: task.title,
-        user: req.user.id,
-        // Copy other fields as needed
-      });
+//       // Move the task to completed tasks section
+//       const completedTask = new CompletedTask({
+//         title: task.title,
+//         user: req.user.id,
+//         // Copy other fields as needed
+//       });
   
-      await completedTask.save();
+//       await completedTask.save();
   
-      // Remove the task from the main tasks
-      await Task.findByIdAndDelete(taskId);
+//       // Remove the task from the main tasks
+//       await Task.findByIdAndDelete(taskId);
   
-      return res.status(200).json('Task deleted successfully');
-    } catch (error) {
-      return next(error);
+//       return res.status(200).json(completedTask);
+//     } catch (error) {
+//       return next(error);
+//     }
+//   };
+
+// In your controllers file (e.g., tasksController.js)
+
+
+export const moveToCompletedTasks = async (req, res, next) => {
+  try {
+    const taskId = req.params.taskId;
+    const task = await Task.findById(taskId).exec();
+
+    if (!task) {
+      return next(createError({ status: 404, message: "No task found" }));
     }
-  };
+
+    if (task.user.toString() !== req.user.id) {
+      return next(createError({ status: 401, message: "Task not associated with your profile" }));
+    }
+
+    // Move the task to completed tasks section
+    const completedTask = new CompletedTask({
+      title: task.title,
+      user: req.user.id,
+      // Copy other fields as needed
+    });
+
+    await completedTask.save();
+
+    // Remove the task from the main tasks
+    await Task.findByIdAndDelete(taskId);
+
+    return res.status(200).json(completedTask);
+  } catch (error) {
+    return next(error);
+  }
+};

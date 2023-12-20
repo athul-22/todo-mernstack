@@ -43,6 +43,10 @@ import menai from "../images/menai.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import aibot from "../images/aibot.png";
+import RestoreIcon from "@mui/icons-material/Restore";
+import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import HistorySidebar from "../components/HistorySidebar";
+
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,6 +62,16 @@ const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
 //⭐️ DILOG MODEL
 //⭐️ WELCOME DIALOG BOX
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+//HISTORY DIALOG
+const HistoryDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -127,6 +141,8 @@ export default function Home() {
   // State to control loading state when generating a task
   const [loadingTask, setLoadingTask] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
+  // HISTORY DIALOG
+  const [historySidebarOpen, setHistorySidebarOpen] = React.useState(false);
 
   // AI MODEL OPEN
   const handleOpenAutoAwesome = () => {
@@ -272,6 +288,27 @@ export default function Home() {
     }
   };
 
+
+//   // Move these functions outside
+// const handleHistoryClick = () => {
+//   console.log("HISTORY CLICKED SUCCESSFULLY")
+//   setHistoryDialogOpen(true);
+// };
+
+// const handleCloseHistoryDialog = () => {
+//   setHistoryDialogOpen(false);
+// };
+
+
+const handleHistoryClick = () => {
+  setHistorySidebarOpen(true);
+};
+
+const handleCloseHistorySidebar = () => {
+  setHistorySidebarOpen(false);
+};
+
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -294,7 +331,6 @@ export default function Home() {
             </div>
             <div className="top_today">{todayDate}</div>
 
-
             <div className="top-right">
               {/* <IconButton color="inherit" style={{ backgroundColor: "white",
                     height: "50px",
@@ -310,11 +346,32 @@ export default function Home() {
                     style={{ color: "black", fontSize: "35px", marginLeft:'-130px'}}
                   />
               </IconButton> */}
+
+              {/* <IconButton color="inherit" onClick={handleOpenAutoAwesome}>
+                <Badge
+                  style={{
+                    backgroundColor: "#1890ff",
+                    height: "50px",
+                    width: "50px",
+                    borderRadius: "5px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    boxShadow: "#1890ff 0px 4px 16px 0px",
+                    marginLeft:'50px',
+                    marginRight:'50px'
+                  }}
+                >
+                  <AutoAwesomeIcon
+                    style={{ color: "white", fontSize: "30px" }}
+                  />
+                </Badge>
+              </IconButton> */}
+
               <IconButton color="inherit" onClick={handleOpenAutoAwesome}>
                 <Badge
                   style={{
                     backgroundColor: "#1890ff",
-                    height:'50px',
+                    height: "50px",
                     width: "50px",
                     borderRadius: "5px",
                     justifyContent: "center",
@@ -328,7 +385,27 @@ export default function Home() {
                 </Badge>
               </IconButton>
 
-              <IconButton color="inherit">
+              <HistorySidebar open={historySidebarOpen} onClose={handleCloseHistorySidebar} />
+
+              <IconButton color="inherit" onClick={handleHistoryClick}>
+        <Badge
+          style={{
+            backgroundColor: "#1890ff",
+            height: "50px",
+            width: "50px",
+            borderRadius: "5px",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "#1890ff 0px 4px 16px 0px",
+          }}
+        >
+          <RestoreIcon
+            style={{ color: "white", fontSize: "30px" }}
+          />
+        </Badge>
+      </IconButton>
+
+              {/* <IconButton color="inherit" onClick={handleHistoryClick}>
                 <Badge
                   style={{
                     backgroundColor: "#1890ff",
@@ -340,11 +417,14 @@ export default function Home() {
                     boxShadow: "#1890ff 0px 4px 16px 0px",
                   }}
                 >
-                  <NotificationsNoneOutlinedIcon
+                  <RestoreIcon
                     style={{ color: "white", fontSize: "30px" }}
+                    onClose={handleCloseHistoryDialog}
+                    aria-labelledby="history-dialog-title"
+                    open={historyDialogOpen}
                   />
                 </Badge>
-              </IconButton>
+              </IconButton> */}
 
               <IconButton color="inherit" onClick={handleClickOpensettings}>
                 <Badge
@@ -384,16 +464,11 @@ export default function Home() {
               </IconButton> */}
             </div>
           </div>
-          
+
           <TaskList />
-          
 
           {/* <Toolbar /> */}
         </Box>
-
-       
-
-       
       </Box>
       {/* ⭐️ WELCOME DIALOG BOX STARTS */}
       <BootstrapDialog
@@ -526,8 +601,6 @@ export default function Home() {
           </div>
           <br />
 
-         
-
           <div style={{ display: "flex", justifyContent: "center" }}>
             {/* <button
               onClick={handleLogout}
@@ -630,7 +703,7 @@ export default function Home() {
       </BootstrapDialogSettings>
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      
+
       <BootstrapDialogSettings
         onClose={handleCloseAutoAwesome}
         aria-labelledby="auto-awesome-dialog-title"

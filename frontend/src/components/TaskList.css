@@ -4,7 +4,7 @@ body {
 }
 
 #taskmain {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -59,7 +59,7 @@ table {
 /* Style the task list rows */
 .task-list {
   background-color: white;
-  height: 50px;
+  height: 20px;
   width: 700px;
   display: flex;
   align-items: center;
@@ -70,17 +70,25 @@ table {
 
 /* Style the checkbox */
 .task-checkbox {
-  margin-top: 24px;
-  margin-left: 20px;
+  /* margin-top: 24px;
+  margin-left: 20px; */
   width: 20px; /* Set your desired width */
   height: 20px; /* Set your desired height */
 }
 
 /* Style the task title */
+/* .task-title {
+  margin-left: 0px;
+  font-size: 20px;
+} */
+
+/* Reset default styles for p tags inside .task-title */
 .task-title {
-  margin-left: 20px;
+  margin: 0;
+  padding: 0;
   font-size: 20px;
 }
+
 
 /* Style the delete button */
 .task-delete-btn {
@@ -92,9 +100,9 @@ table {
   cursor: pointer;
 }
 
-tr {
+/* tr {
   margin-bottom: 10px;
-}
+} */
 
 /* Style the add task SECTION */
 
@@ -115,7 +123,7 @@ tr {
 }
 
 .priority{
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   display: flex;
   justify-content:center;
 }
@@ -176,8 +184,7 @@ tr {
   width: 30px;
   height: 10px;
   border-radius: 20px;
- margin-left: 10px;
-  margin-top: 30px;
+ 
   display: inline-flex;
 }
 
@@ -225,4 +232,13 @@ tr {
 .green.selected {
   background-color: #50c878;
   color: white;
+}
+
+
+tr {
+  height: 10px;
+}
+
+tr td {
+   height: auto !important;
 }

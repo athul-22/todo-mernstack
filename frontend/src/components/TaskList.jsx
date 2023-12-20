@@ -4,6 +4,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { VariableSizeList as List } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 import "./TaskList.css";
 import BodyNoTask from "../images/boynotask.png";
 import toast from "react-hot-toast";
@@ -28,16 +31,7 @@ function TaskList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("");
   const [isHovered, setIsHovered] = useState(false);
-  const [completedTasks, setCompletedTasks] = useState([])
-
-  const handleTaskClick = (task) => {
-    setSelectedTask(task);
-    setIsModalOpen(true);
-  };
-
-  const handleButtonClick = () => {
-    // Handle button click
-  };
+  const [completedTasks, setCompletedTasks] = useState([]);
 
   useEffect(() => {
     getTasks();
@@ -82,49 +76,15 @@ function TaskList() {
     }
   };
 
-  // const deleteTask = async (id) => {
-  //   try {
-  //     await axios.patch(`/api/tasks/${id}`);
-  //     // toast.success("Task deleted successfully");
-  //     toast.success("Task deleted successfully");
-  //     setTaskList(taskList.filter((task) => task._id !== id));
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-
-
-  // const deleteTask = async (id) => {
-  //   try {
-  //     await axios.delete(`/api/tasks/${id}`);
-  //     toast.success("Task deleted successfully");
-  
-  //     // Find the task in the taskList
-  //     const deletedTask = taskList.find((task) => task._id === id);
-  
-  //     // Move the deleted task to the completed tasks section
-  //     setCompletedTasks([deletedTask, ...completedTasks]);
-  
-  //     // Remove the task from the main taskList
-  //     setTaskList(taskList.filter((task) => task._id !== id));
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const deleteTask = async (id) => {
     try {
       await axios.delete(`/api/tasks/move-to-completed/${id}`);
       toast.success("Task Removed successfully");
-      // Remove the task from the main taskList (optional, as the backend already handles it)
       setTaskList(taskList.filter((task) => task._id !== id));
     } catch (err) {
       console.log(err);
     }
   };
-  
-  
 
   const handleCheckboxClick = async (clickedTask) => {
     setIsLoading(true);
@@ -154,17 +114,8 @@ function TaskList() {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
-
-      // Open the modal after updating the task
       handleTaskClick(clickedTask);
     }
-  };
-
-  const handleCloseIconClick = () => {
-    // Close the modal when the close icon is clicked
-    setIsModalOpen(false);
-
-    // Optionally, you can perform additional actions here
   };
 
   const updateTaskCompletionStatus = async (taskId, isCompleted) => {
@@ -194,6 +145,8 @@ function TaskList() {
     setIsHovered(false);
   };
 
+ 
+
   return (
     <div style={{ minHeight: "10%", display: "flex", flexDirection: "column" }}>
       <div className="filter">
@@ -208,7 +161,7 @@ function TaskList() {
           onChange={handleChangeselectpriority}
           style={{
             float: "right",
-            marginRight: "450px",
+            marginRight: "20px", // Adjusted margin
             height: "50px",
             width: "auto",
             color: "white",
@@ -222,10 +175,7 @@ function TaskList() {
             boxShadow: "#1890ff 0px 4px 16px 0px",
           }}
         >
-          <MenuItem value="">⚡️ All</MenuItem>
-          <MenuItem value="h">🔺 HIGH</MenuItem>
-          <MenuItem value="m">🔸 MEDIUM</MenuItem>
-          <MenuItem value="l">❇️ LOW</MenuItem>
+          {/* ... (previous menu items) */}
         </Select>
       </div>
       <div style={{ flex: 1, overflowY: "auto" }}>
@@ -234,122 +184,100 @@ function TaskList() {
             className="task-list-container"
             style={{
               display: "flex",
-              justifyContent: "center",
-              marginTop: "50px",
-              height: "550px",
-              overflowY: "scroll",
+              flexDirection: "column", // Adjusted flexDirection
+              alignItems: "center", // Centered items
+              marginTop: "20px", // Adjusted margin
             }}
           >
-            {taskList.length > 0 ? (
-              <table>
-                {
-                  <tbody style={{ justifyContent: "center" }}>
-                    {taskList
-                      .filter((task) =>
-                        priorityFilter ? task.priority === priorityFilter : true
-                      )
-                      .map((task) => (
-                        <tr
-                          className={`task-list ${
-                            isHovered ? "hover-disabled" : ""
-                          }`}
-                          key={task._id}
-                          // onClick={() => handleTaskClick(task)}
-                          onMouseEnter={handleMouseEnter}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <td
-                            className="task-item"
-                            style={{ display: "flex", paddingTop: "5px" }}
+            <TableContainer component={Paper} style={{ width: '70%',borderRadius: "20px" ,border:'1px solid grey'}}>
+              <Table style={{ width: '100%', borderCollapse: "collapse" }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell>Task</TableCell>
+                    <TableCell>Priority</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody style={{paddingTop: 0.8, paddingBottom: 0}} >
+                  {taskList
+                    .filter((task) =>
+                      priorityFilter ? task.priority === priorityFilter : true
+                    )
+                    .map((task) => (
+                      <TableRow key={task._id} style={{ maxHeight: '20px' }}>
+                        <TableCell style={{ maxHeight: '20px' }}>
+                          <div
+                            onChange={() => handleCheckboxClick(task)}
+                            role="checkbox"
+                            aria-checked
+                            
                           >
-                            <div
-                              onChange={() => handleCheckboxClick(task)}
-                              role="checkbox"
-                              aria-checked
-                            >
-                              <input
-                                className="task-checkbox"
-                                type="checkbox"
-                                checked={task.isCompleted}
-                                disabled={isLoading}
-                                readOnly
-                                tabIndex={-1}
-                              />
-                            </div>
-                            <div onClick={() => handleTaskClick(task)}>
-                              <p
-                                className="task-title"
-                                style={{
-                                  textDecoration: task.isCompleted
-                                    ? "line-through"
-                                    : "none",
-                                  color: task.isCompleted ? "grey" : "black",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                {task.title}
-                              </p>
-                            </div>
-                            <div
-                              className={`priority-box ${task.priority}`}
-                            ></div>
-                          </td>
-
-                          <td>
-                            <ClearIcon
-                              className="task-delete-btn"
-                              onClick={() => deleteTask(task._id)}
-                              style={{
-                                color: "black",
-                                backgroundColor: "#f5f5f5",
-                                alignContent: "center",
-                                fontSize: "10px",
-                                marginRight: "20px",
-                                height: "35px",
-                                width: "35px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
+                            <input
+                              className="task-checkbox"
+                              type="checkbox"
+                              checked={task.isCompleted}
+                              disabled={isLoading}
+                              readOnly
+                              tabIndex={-1}
                             />
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                }
-                <TaskModal
-                  open={isModalOpen}
-                  handleClose={handleCloseIconClick}
-                  taskDetails={selectedTask}
-                />
-              </table>
-            ) : (
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "100px",
-                    marginBottom: "100px",
-                  }}
-                >
-                  <img src={BodyNoTask} height="300px" width="300px" />
-                  <br />
-                </div>
-                <p
-                  style={{
-                    textAlign: "center",
-                    fontSize: "20px",
-                    color: "grey",
-                  }}
-                >
-                  All Tasks are completed! 🎉
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div className="footer">
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div onClick={() => handleTaskClick(task)}>
+                            <p
+                              className="task-title"
+                              style={{
+                                textDecoration: task.isCompleted
+                                  ? "line-through"
+                                  : "none",
+                                color: task.isCompleted ? "grey" : "black",
+                                cursor: "pointer",
+                                padding: 0, 
+                                margin: 0
+                              }}
+                            >
+                              {task.title}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div
+                            className={`priority-box ${task.priority}`}
+                          ></div>
+                        </TableCell>
+                        <TableCell>
+                          <ClearIcon
+                            className="task-delete-btn"
+                            onClick={() => deleteTask(task._id)}
+                            style={{
+                              color: "black",
+                              backgroundColor: "#f5f5f5",
+                              alignContent: "center",
+                              fontSize: "6px",
+                              marginRight: "20px",
+                              height: "25px",
+                              width: "25px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              margin:'10px'
+                            }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {/* <hr
+              style={{
+                width: "100%", // Full width
+                border: "1px solid #ddd", // Border style
+              }}
+            /> */}
+            <div className="footer">
             {newTask && (
               <div>
                 <div className="priority">
@@ -454,6 +382,7 @@ function TaskList() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

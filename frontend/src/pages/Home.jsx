@@ -318,7 +318,8 @@ const handleCloseHistorySidebar = () => {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "#f6f9fb" : "white",
+              //theme.palette.mode === "light" ? "#f6f9fb" : "white",
+              theme.palette.mode === "light" ? "white" : "white",
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",

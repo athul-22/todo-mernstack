@@ -4,9 +4,18 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { VariableSizeList as List } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
+import { VariableSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from "@mui/material";
 import "./TaskList.css";
 import BodyNoTask from "../images/boynotask.png";
 import toast from "react-hot-toast";
@@ -19,9 +28,37 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Table as AntTable, Tag } from 'antd';
-import DoneIcon from '@mui/icons-material/Done';
+import { Table as AntTable, Tag } from "antd";
+import DoneIcon from "@mui/icons-material/Done";
+import AddButton from "./AddTask";
 
+const getTasks = async () => {
+  console.log("Fetching tasks...");
+  try {
+    const { data } = await axios.get("/api/tasks/mytasks");
+    setTaskList(
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const addTaskFun = async (setReloadTable, setNewTask, getTasks) => {
+  try {
+    // Implement your logic to add the task
+    // ...
+
+    // Set reloadTable to true to trigger a re-render in TaskList
+    setReloadTable(true);
+    // ...
+
+    await getTasks();
+    console.log("got it bro");
+  } catch (error) {
+    console.error('Error in addTaskFun:', error);
+  }
+};
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -35,23 +72,29 @@ function TaskList() {
   const [priorityFilter, setPriorityFilter] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [completedTasks, setCompletedTasks] = useState([]);
+  const [reloadTable, setReloadTable] = useState(false);
 
   useEffect(() => {
     getTasks();
   }, []);
 
-  const addTaskFun = async (e) => {
-    e.preventDefault();
-
+  const addTaskFun = async (taskData) => {
+    // e.preventDefault();
     if (newTask.length <= 0) {
       toast.error("Task is empty");
       return;
     }
 
     try {
+      // Implement your logic to add the task using the taskData
+      console.log("addtaskfun called", taskData);
+      // Make API request or update state as needed
+
+      // Set reloadTable to true to trigger a re-render in TaskList
+     
       const formattedDate = dayjs(datetimeval).format("YYYY-MM-DD");
       const formattedTime = dayjs(datetimeval).format("HH:mm:ss.SSS[Z]");
-
+   
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
         priority: priority,
@@ -63,12 +106,15 @@ function TaskList() {
       setTaskList([data, ...taskList]);
       toast.success("Task added successfully");
       setNewTask("");
+      getTasks();
+     
     } catch (error) {
       console.log(error);
     }
   };
 
   const getTasks = async () => {
+    console.log("Fetching tasks...");
     try {
       const { data } = await axios.get("/api/tasks/mytasks");
       setTaskList(
@@ -148,24 +194,23 @@ function TaskList() {
     setIsHovered(false);
   };
 
-
   const antdColumns = [
     {
-      title: 'Priority',
-      dataIndex: 'priority',
-      key: 'priority',
-      width: '10%',
+      title: "Priority",
+      dataIndex: "priority",
+      key: "priority",
+      width: "20%",
       render: (priority) => {
-        let color = '';
+        let color = "";
         switch (priority) {
-          case 'h':
-            color = 'red';
+          case "h":
+            color = "red";
             break;
-          case 'm':
-            color = 'orange';
+          case "m":
+            color = "orange";
             break;
-          case 'l':
-            color = 'green';
+          case "l":
+            color = "green";
             break;
           default:
             break;
@@ -174,9 +219,9 @@ function TaskList() {
       },
     },
     {
-      title: 'Mark as Done',
-      key: 'markAsDone',
-      width: '20%',
+      title: "Mark as Done",
+      key: "markAsDone",
+      width: "20%",
       render: (_, record) => (
         <Button
           type="primary"
@@ -188,15 +233,15 @@ function TaskList() {
       ),
     },
     {
-      title: 'Task',
-      dataIndex: 'title',
-      key: 'title',
-      width: '60%',
+      title: "Task",
+      dataIndex: "title",
+      key: "title",
+      width: "80%",
     },
     {
-      title: 'Delete',
-      key: 'delete',
-      width: '35%',
+      title: "Delete",
+      key: "delete",
+      width: "45%",
       render: (_, record) => (
         <Button
           type="danger"
@@ -209,149 +254,40 @@ function TaskList() {
     },
     // Add other columns as needed
   ];
- 
 
   return (
-    <div className="task-list-container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-    <div style={{ overflowX: 'auto', width: '100%' }}>
-      <AntTable
-        dataSource={taskList}
-        columns={antdColumns}
-        rowKey="_id"
-        pagination={false}
-        style={{ width: '100%', borderRadius: '20px', border: '1px solid #eee' }}
-      />
-    </div>
-  
-
-            <div className="footer" style={{display:'flex',justifyContent:'center'}}>
-            {newTask && (
-              <div>
-                <div className="priority">
-                  <div>
-                    <DatePicker
-                      selected={datetimeval}
-                      onChange={(date) => setDateTimeVal(date)}
-                      showTimeSelect
-                      timeFormat="HH:mm"
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="MMMM d, yyyy h:mm aa"
-                      popperPlacement="bottom-start"
-                      popperModifiers={{
-                        flip: {
-                          behavior: ["bottom"],
-                        },
-                        preventOverflow: {
-                          enabled: false,
-                        },
-                        hide: {
-                          enabled: false,
-                        },
-                      }}
-                      popperClassName="date-picker-popper"
-                      showPopperArrow={false}
-                      customInput={<CustomCalendarIcon />}
-                    />
-                  </div>
-                  <button
-                    className={`red ${
-                      selectedPriority === "h" ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      setPriority("h");
-                      setSelectedPriority("h");
-                    }}
-                  >
-                    High Priority
-                  </button>
-                  <button
-                    className={`orange ${
-                      selectedPriority === "m" ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      setPriority("m");
-                      setSelectedPriority("m");
-                    }}
-                  >
-                    Medium Priority
-                  </button>
-                  <button
-                    className={`green ${
-                      selectedPriority === "l" ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      setPriority("l");
-                      setSelectedPriority("l");
-                    }}
-                  >
-                    Low Priority
-                  </button>
-                </div>
-              </div>
-            )}
-          
-                      <div style={{display:'flex'}}>
-                      <input
-              value={newTask}
-              onChange={(e) => {
-                setNewTask(e.target.value);
-              }}
-              onFocus={() => setipFocused(true)}
-              onBlur={() => setipFocused(false)}
-              placeholder="Task Title"
-              type="text"
-              className="taskinput"
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                color: "white",
-                border: "none",
-                height: "50px",
-              }}
-            />
-
-            <button
-              onClick={addTaskFun}
-              className="submit"
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                boxShadow: "#1890ff 0px 4px 16px 0px",
-                backgroundColor: "#1890ff",
-                color: "white",
-                border: "none",
-                height: "50px",
-                width: "130px",
-              }}
-            >
-              Submit
-            </button>
-                      </div>
-           
-          </div>
+    <div>
+      <AddButton callAddFun={()=>addTaskFun()} />
+      <div
+        className="task-list-container"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ overflowY: "scroll", width: "100%", height: "600px" }}>
+          <AntTable
+            dataSource={taskList}
+            columns={antdColumns}
+            rowKey="_id"
+            pagination={false}
+            style={{
+              height: "100vh",
+              width: "100%",
+              borderRadius: "auto",
+              border: "auto black",
+              position: "relative", 
+            }}
+            scroll={{ y: 600 }} // Set the y property to the desired height
+          />
         </div>
-  
+      </div>
+    </div>
   );
 }
 
-const CustomCalendarIcon = React.forwardRef(({ value, onClick }, ref) => (
-  <CalendarTodayIcon
-    onClick={onClick}
-    color="white"
-    style={{
-      marginRight: "30px",
-      marginTop: "-5px",
-      backgroundColor: "#1890ff",
-      color: "white",
-      height: "50px",
-      width: "50px",
-      padding: "10px",
-      boxShadow: "#1890ff 0px 4px 16px 0px",
-      borderRadius: "10px",
-    }}
-    ref={ref}
-  />
-));
 
 export default TaskList;

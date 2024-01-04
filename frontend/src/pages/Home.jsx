@@ -47,6 +47,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import { Drawer, List, ListItem, ListItemText } from "@mui/material";
 import HistorySidebar from "../components/HistorySidebar";
 import Analysis from "../components/Analysis";
+import AddButton from "../components/AddTask";
 
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
@@ -408,8 +409,9 @@ export default function Home() {
               </IconButton>
             </div>
             
-
+            
             <div style={{paddingTop:'100px',justifyContent:'center'}}>
+            {/* <AddButton /> */}
             <TaskList />
             </div>
 

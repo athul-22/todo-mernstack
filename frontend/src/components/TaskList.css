@@ -12,7 +12,7 @@ body {
   overflow-x: auto;
 }
 
-/* Styles for larger screens with padding */
+/* Styles for larger screens with padding
 @media (min-width: 768px) {
   .task-list-container {
     padding: 0 50px;
@@ -20,11 +20,11 @@ body {
 }
 
 /* Styles for smaller screens without padding */
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .task-list-container {
     padding: 0;
   }
-}
+} */ */
 
 /* Styles for the Ant Design table */
 .ant-table {

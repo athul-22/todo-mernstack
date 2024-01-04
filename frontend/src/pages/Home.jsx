@@ -43,6 +43,12 @@ import menai from "../images/menai.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import aibot from "../images/aibot.png";
+import RestoreIcon from "@mui/icons-material/Restore";
+import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import HistorySidebar from "../components/HistorySidebar";
+import Analysis from "../components/Analysis";
+import AddButton from "../components/AddTask";
+
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,6 +64,16 @@ const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
 //⭐️ DILOG MODEL
 //⭐️ WELCOME DIALOG BOX
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+//HISTORY DIALOG
+const HistoryDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -127,6 +143,8 @@ export default function Home() {
   // State to control loading state when generating a task
   const [loadingTask, setLoadingTask] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
+  // HISTORY DIALOG
+  const [historySidebarOpen, setHistorySidebarOpen] = React.useState(false);
 
   // AI MODEL OPEN
   const handleOpenAutoAwesome = () => {
@@ -272,129 +290,136 @@ export default function Home() {
     }
   };
 
+  //   // Move these functions outside
+  // const handleHistoryClick = () => {
+  //   console.log("HISTORY CLICKED SUCCESSFULLY")
+  //   setHistoryDialogOpen(true);
+  // };
+
+  // const handleCloseHistoryDialog = () => {
+  //   setHistoryDialogOpen(false);
+  // };
+
+  const handleHistoryClick = () => {
+    setHistorySidebarOpen(true);
+  };
+
+  const handleCloseHistorySidebar = () => {
+    setHistorySidebarOpen(false);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
+      <CssBaseline />
 
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "#f6f9fb" : "white",
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          {/* main contents start from here */}
-          <div className="main_outer">
-            <div className="top-greetings">
-              Welcome <span className="username">{user.name}</span> 👋 !
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            //theme.palette.mode === "light" ? "#f6f9fb" : "white",
+            theme.palette.mode === "light" ? "white" : "white",
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+        }}
+      >
+        <Box display="flex" height="100%" >
+          {/* Left Section (35%) */}
+          <Box width="30%" sx={{ overflowY: 'auto' ,}}>
+            <div className="main_outer">
+              <div className="top-greetings">
+                Welcome <span className="username">{user.name}</span> 👋 !
+              </div>
+              <div className="top_today">{todayDate}</div>
             </div>
-            <div className="top_today">{todayDate}</div>
+            <Analysis/>
+          </Box>
 
+          {/* Space between sections (5%) */}
+          <Box width="5%" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+  <div
+    style={{
+      borderLeft: '1px solid #a7a7a7',
+      height: '100%',
+      marginLeft: '10px', // Adjust the margin as needed
+    }}
+  />
+</Box>
 
+          {/*🌟 Right Section (60%) */}
+          <Box width="60%" backgroundColor="#ffffff">
             <div className="top-right">
-              {/* <IconButton color="inherit" style={{ backgroundColor: "white",
-                    height: "50px",
-                    width: "200px",
-                    borderRadius: "5px",
-                    paddingLeft:'20px',
-                    alignItems: "center",
-                    float:'left',
-                   
-                    }}>
-      
-                  <KeyboardArrowDownIcon
-                    style={{ color: "black", fontSize: "35px", marginLeft:'-130px'}}
-                  />
-              </IconButton> */}
               <IconButton color="inherit" onClick={handleOpenAutoAwesome}>
                 <Badge
-                  style={{
-                    backgroundColor: "#1890ff",
-                    height:'50px',
-                    width: "50px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    boxShadow: "#1890ff 0px 4px 16px 0px",
-                  }}
+                 style={{
+                  height: "40px",
+                  width: "40px",
+                  borderRadius: "10px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  border:'1px solid #7a7a7a',
+                
+                }}
                 >
                   <AutoAwesomeIcon
-                    style={{ color: "white", fontSize: "30px" }}
+                    style={{ color: "#7a7a7a", fontSize: "20px" }}
                   />
                 </Badge>
               </IconButton>
 
-              <IconButton color="inherit">
+              <HistorySidebar
+                open={historySidebarOpen}
+                onClose={handleCloseHistorySidebar}
+              />
+
+              <IconButton color="inherit" onClick={handleHistoryClick}>
                 <Badge
-                  style={{
-                    backgroundColor: "#1890ff",
-                    height: "50px",
-                    width: "50px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    boxShadow: "#1890ff 0px 4px 16px 0px",
+                 style={{
+                  height: "40px",
+                  width: "40px",
+                  borderRadius: "10px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  border:'1px solid #7a7a7a',
+                
+                  
                   }}
                 >
-                  <NotificationsNoneOutlinedIcon
-                    style={{ color: "white", fontSize: "30px" }}
-                  />
+                  <RestoreIcon  style={{ color: "#7a7a7a", fontSize: "20px" }}/>
                 </Badge>
               </IconButton>
 
               <IconButton color="inherit" onClick={handleClickOpensettings}>
                 <Badge
                   style={{
-                    backgroundColor: "#1890ff",
-                    height: "50px",
-                    width: "50px",
-                    borderRadius: "5px",
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "10px",
                     justifyContent: "center",
                     alignItems: "center",
-                    boxShadow: "#1890ff 0px 4px 16px 0px",
+                    border:'1px solid #7a7a7a',
+                  
+                  
                   }}
                 >
                   <DragHandleIcon
-                    style={{ color: "white", fontSize: "35px" }}
+                     style={{ color: "#7a7a7a", fontSize: "20px" }}
                   />
                 </Badge>
               </IconButton>
-
-              {/* ⭐️ ADD TASK BUTTON TOP */}
-              {/* <IconButton color="inherit" onClick={handleClickOpenAddTask}>
-                <Badge
-                  style={{
-                    backgroundColor: "#1890ff",
-                    height: "50px",
-                    width: "50px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    boxShadow: "#1890ff 0px 4px 16px 0px",
-                  }}
-                >
-                  <AddOutlinedIcon
-                    style={{ color: "white", fontSize: "35px" }}
-                  />
-                </Badge>
-              </IconButton> */}
             </div>
-          </div>
-          
-          <TaskList />
-          
+            
+            
+            <div style={{paddingTop:'100px',justifyContent:'center'}}>
+            {/* <AddButton /> */}
+            <TaskList />
+            </div>
 
-          {/* <Toolbar /> */}
+          </Box>
         </Box>
-
-       
-
-       
       </Box>
+
+      {/*-------------------------------DIALOG MODEL CODES BELOW-------------------------------------*/}
       {/* ⭐️ WELCOME DIALOG BOX STARTS */}
       <BootstrapDialog
         onClose={handleClosesettings}
@@ -441,6 +466,7 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialog>
+
       {/*⭐️ SETTINGS MODEL */}
       <BootstrapDialogSettings
         onClose={handleClosesettings}
@@ -526,101 +552,7 @@ export default function Home() {
           </div>
           <br />
 
-         
-
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {/* <button
-              onClick={handleLogout}
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                borderRadius: "5px",
-                boxShadow: "#f96970 0px 4px 16px 0px",
-                border: "2px solid #f96970",
-                color: "white",
-                backgroundColor: "#f96970",
-                height: "40px",
-                width: "130px",
-              }}
-            >
-              Logout
-            </button> */}
-          </div>
-        </DialogContent>
-        <DialogActions>
-          {/* <Button autoFocus onClick={handleClosesettings}>
-            Save Profile
-          </Button> */}
-        </DialogActions>
-      </BootstrapDialogSettings>
-      {/* ⭐️ ADD TASK */}
-      <BootstrapDialogSettings
-        onClose={handleCloseAddTask}
-        aria-labelledby="customized-dialog-title"
-        open={addTaskOpen}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {/* Profile */}
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleCloseAddTask}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[10],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent style={{ height: "auto", width: "100px" }}>
-          {/* <div style={{ display: "flex", justifyContent: "center" }}>
-            <img src={man} height="100px" width="100px" />
-          </div>
-          <h2 style={{ textAlign: "center" }}>{user.name}</h2>
-          <h3
-            style={{ textAlign: "center", marginTop: "-25px", color: "grey" }}
-          >
-            {user.email}
-          </h3>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <button
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                borderRadius: "5px",
-                boxShadow: "#1890ff 0px 4px 16px 0px",
-                backgroundColor: "#1890ff",
-                color: "white",
-                border: "none",
-                height: "40px",
-                width: "130px",
-              }}
-            >
-              Edit Profile
-            </button>
-          </div>
-          <br />
-
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <button
-              onClick={handleLogout}
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                borderRadius: "5px",
-                boxShadow: "#f96970 0px 4px 16px 0px",
-                border: "2px solid #f96970",
-                color: "white",
-                backgroundColor: "#f96970",
-                height: "40px",
-                width: "130px",
-              }}
-            >
-              Logout
-            </button>
-          </div> */}
+          <div style={{ display: "flex", justifyContent: "center" }}></div>
         </DialogContent>
         <DialogActions>
           {/* <Button autoFocus onClick={handleClosesettings}>
@@ -629,8 +561,7 @@ export default function Home() {
         </DialogActions>
       </BootstrapDialogSettings>
       {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      {/* ⭐️ AUTO AWESOME DIALOG BOX */}
-      
+
       <BootstrapDialogSettings
         onClose={handleCloseAutoAwesome}
         aria-labelledby="auto-awesome-dialog-title"

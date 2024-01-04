@@ -38,6 +38,14 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import TaskList from "../components/TaskList";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import menai from "../images/menai.png";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import aibot from "../images/aibot.png";
+import RestoreIcon from "@mui/icons-material/Restore";
+import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import HistorySidebar from "../components/HistorySidebar";
 
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -53,6 +61,16 @@ const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
 //⭐️ DILOG MODEL
 //⭐️ WELCOME DIALOG BOX
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+//HISTORY DIALOG
+const HistoryDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -117,6 +135,53 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [todayDate, setTodayDate] = useState("");
   const [verified, setVerified] = useState(false);
+  const [autoAwesomeOpen, setAutoAwesomeOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  // State to control loading state when generating a task
+  const [loadingTask, setLoadingTask] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(false);
+  // HISTORY DIALOG
+  const [historySidebarOpen, setHistorySidebarOpen] = React.useState(false);
+
+  // AI MODEL OPEN
+  const handleOpenAutoAwesome = () => {
+    setShowSkeleton(true);
+    setAutoAwesomeOpen(true);
+  };
+
+  // AI MODEL CLOSE
+  const handleCloseAutoAwesome = () => {
+    setShowSkeleton(false);
+    setAutoAwesomeOpen(false);
+  };
+
+  const handleGenerateTask = async () => {
+    setLoadingTask(true);
+    setShowSkeleton(true);
+
+    try {
+      // Call your Google Palm API here to fetch tasks
+      // Example:
+      // const response = await axios.get("YOUR_API_ENDPOINT");
+      // const tasks = response.data;
+
+      // Simulating API call with setTimeout
+      setTimeout(() => {
+        // Update state to hide skeleton and stop loading
+        setShowSkeleton(false);
+        setLoadingTask(false);
+
+        // Fetch tasks and do something with them
+        // fetchTasks();
+      }, 4000); // show skeleton for 4 seconds
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+
+      // Update state to hide skeleton and stop loading in case of an error
+      setShowSkeleton(false);
+      setLoadingTask(false);
+    }
+  };
 
   //⭐️ SETTINGS MENU OPEN CLOSE FUNCTIONS
   const handleClickOpensettings = () => {
@@ -140,8 +205,8 @@ export default function Home() {
     try {
       const { data } = await axios.get("/api/users/profile");
       setUser(data);
-      console.log(response.data);
-      setVerified(response.data.verified);
+      // console.log(response.data);
+      // setVerified(response.data.verified)
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -222,6 +287,24 @@ export default function Home() {
     }
   };
 
+  //   // Move these functions outside
+  // const handleHistoryClick = () => {
+  //   console.log("HISTORY CLICKED SUCCESSFULLY")
+  //   setHistoryDialogOpen(true);
+  // };
+
+  // const handleCloseHistoryDialog = () => {
+  //   setHistoryDialogOpen(false);
+  // };
+
+  const handleHistoryClick = () => {
+    setHistorySidebarOpen(true);
+  };
+
+  const handleCloseHistorySidebar = () => {
+    setHistorySidebarOpen(false);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -231,7 +314,8 @@ export default function Home() {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "#f6f9fb" : "white",
+              //theme.palette.mode === "light" ? "#f6f9fb" : "white",
+              theme.palette.mode === "light" ? "white" : "white",
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
@@ -245,22 +329,7 @@ export default function Home() {
             <div className="top_today">{todayDate}</div>
 
             <div className="top-right">
-              {/* <IconButton color="inherit" style={{ backgroundColor: "white",
-                    height: "50px",
-                    width: "200px",
-                    borderRadius: "5px",
-                    paddingLeft:'20px',
-                    alignItems: "center",
-                    float:'left',
-                   
-                    }}>
-      
-                  <KeyboardArrowDownIcon
-                    style={{ color: "black", fontSize: "35px", marginLeft:'-130px'}}
-                  />
-              </IconButton> */}
-
-              {/* <IconButton color="inherit">
+              <IconButton color="inherit" onClick={handleOpenAutoAwesome}>
                 <Badge
                   style={{
                     backgroundColor: "#1890ff",
@@ -272,15 +341,18 @@ export default function Home() {
                     boxShadow: "#1890ff 0px 4px 16px 0px",
                   }}
                 >
-                  <NotificationsNoneOutlinedIcon
+                  <AutoAwesomeIcon
                     style={{ color: "white", fontSize: "30px" }}
                   />
                 </Badge>
-              </IconButton> */}
+              </IconButton>
 
-              
+              <HistorySidebar
+                open={historySidebarOpen}
+                onClose={handleCloseHistorySidebar}
+              />
 
-              <IconButton color="inherit">
+              <IconButton color="inherit" onClick={handleHistoryClick}>
                 <Badge
                   style={{
                     backgroundColor: "#1890ff",
@@ -292,9 +364,7 @@ export default function Home() {
                     boxShadow: "#1890ff 0px 4px 16px 0px",
                   }}
                 >
-                  <NotificationsNoneOutlinedIcon
-                    style={{ color: "white", fontSize: "30px" }}
-                  />
+                  <RestoreIcon style={{ color: "white", fontSize: "30px" }} />
                 </Badge>
               </IconButton>
 
@@ -315,33 +385,14 @@ export default function Home() {
                   />
                 </Badge>
               </IconButton>
-
-              {/* ⭐️ ADD TASK BUTTON TOP */}
-              <IconButton color="inherit" onClick={handleClickOpenAddTask}>
-                <Badge
-                  style={{
-                    backgroundColor: "#1890ff",
-                    height: "50px",
-                    width: "50px",
-                    borderRadius: "5px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    boxShadow: "#1890ff 0px 4px 16px 0px",
-                  }}
-                >
-                  <AddOutlinedIcon
-                    style={{ color: "white", fontSize: "35px" }}
-                  />
-                </Badge>
-              </IconButton>
             </div>
           </div>
+
           <TaskList />
 
           {/* <Toolbar /> */}
         </Box>
       </Box>
-
       {/* ⭐️ WELCOME DIALOG BOX STARTS */}
       <BootstrapDialog
         onClose={handleClosesettings}
@@ -388,7 +439,6 @@ export default function Home() {
           </Button> */}
         </DialogActions>
       </BootstrapDialog>
-
       {/*⭐️ SETTINGS MODEL */}
       <BootstrapDialogSettings
         onClose={handleClosesettings}
@@ -474,24 +524,7 @@ export default function Home() {
           </div>
           <br />
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {/* <button
-              onClick={handleLogout}
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                borderRadius: "5px",
-                boxShadow: "#f96970 0px 4px 16px 0px",
-                border: "2px solid #f96970",
-                color: "white",
-                backgroundColor: "#f96970",
-                height: "40px",
-                width: "130px",
-              }}
-            >
-              Logout
-            </button> */}
-          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}></div>
         </DialogContent>
         <DialogActions>
           {/* <Button autoFocus onClick={handleClosesettings}>
@@ -501,7 +534,6 @@ export default function Home() {
       </BootstrapDialogSettings>
 
       {/* ⭐️ ADD TASK */}
-
       <BootstrapDialogSettings
         onClose={handleCloseAddTask}
         aria-labelledby="customized-dialog-title"
@@ -522,59 +554,79 @@ export default function Home() {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent style={{ height: "auto", width: "100px" }}>
-          {/* <div style={{ display: "flex", justifyContent: "center" }}>
-            <img src={man} height="100px" width="100px" />
-          </div>
-          <h2 style={{ textAlign: "center" }}>{user.name}</h2>
-          <h3
-            style={{ textAlign: "center", marginTop: "-25px", color: "grey" }}
-          >
-            {user.email}
-          </h3>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <button
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                borderRadius: "5px",
-                boxShadow: "#1890ff 0px 4px 16px 0px",
-                backgroundColor: "#1890ff",
-                color: "white",
-                border: "none",
-                height: "40px",
-                width: "130px",
-              }}
-            >
-              Edit Profile
-            </button>
-          </div>
-          <br />
+        <DialogContent
+          style={{ height: "auto", width: "100px" }}
+        ></DialogContent>
+        <DialogActions></DialogActions>
+      </BootstrapDialogSettings>
+      {/* ⭐️ AUTO AWESOME DIALOG BOX */}
+      {/* ⭐️ AUTO AWESOME DIALOG BOX */}
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <button
-              onClick={handleLogout}
-              style={{
-                cursor: "pointer",
-                fontSize: "17px",
-                borderRadius: "5px",
-                boxShadow: "#f96970 0px 4px 16px 0px",
-                border: "2px solid #f96970",
-                color: "white",
-                backgroundColor: "#f96970",
-                height: "40px",
-                width: "130px",
-              }}
-            >
-              Logout
-            </button>
-          </div> */}
+      <BootstrapDialogSettings
+        onClose={handleCloseAutoAwesome}
+        aria-labelledby="auto-awesome-dialog-title"
+        open={autoAwesomeOpen}
+      >
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseAutoAwesome}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[10],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "auto",
+            width: "500px",
+            padding: "20px 20px 20px 20px",
+          }}
+        >
+          {/* "Generate Task" button */}
+          {!showSkeleton && (
+            <DialogActions>
+              <Button
+                style={{
+                  color: "white",
+                  boxShadow: "#1890ff 0px 4px 16px 0px",
+                  backgroundColor: "#1890ff",
+                }}
+                autoFocus
+                onClick={handleGenerateTask}
+              >
+                Generate Task 🤖
+              </Button>
+            </DialogActions>
+          )}
+
+          <Button
+            style={{
+              color: "white",
+              boxShadow: "#1890ff 0px 4px 16px 0px",
+              backgroundColor: "#1890ff",
+            }}
+            autoFocus
+            onClick={handleGenerateTask}
+          >
+            Generate Task 🤖
+          </Button>
+          {setShowSkeleton && (
+            <div>
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+              <Skeleton variant="rectangular" width={400} height={50} />
+            </div>
+          )}
         </DialogContent>
-        <DialogActions>
-          {/* <Button autoFocus onClick={handleClosesettings}>
-            Save Profile
-          </Button> */}
-        </DialogActions>
       </BootstrapDialogSettings>
     </ThemeProvider>
   );

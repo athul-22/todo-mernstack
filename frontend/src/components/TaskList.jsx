@@ -33,6 +33,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Table as AntTable, Tag } from "antd";
 import DoneIcon from "@mui/icons-material/Done";
 import AddButton from "./AddTask";
+import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
+import Drawer from '@mui/material/Drawer';
 
 const getTasks = async () => {
   console.log("Fetching tasks...");
@@ -81,6 +83,19 @@ function TaskList() {
   const [taskTitle, setTaskTitle] = useState("");
   const [selectedColor, setSelectedColor] = useState("l");
   const [dateTime, setDateTime] = useState(null);
+
+  // RTIMELINE DRAWER 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+
+
 
   useEffect(() => {
     getTasks();
@@ -298,8 +313,11 @@ function TaskList() {
   return (
     <div>
       {/* <AddButton callAddFun={()=>addTaskFun()} /> */}
-      <Button type="primary" style={{border:" 1px solid #BDDEFF"}} onClick={showModal}>
+      <Button type="primary" style={{border:" 1px solid #BDDEFF",marginRight:'20px'}} onClick={showModal}>
         <PlusOutlined /> Add Task
+      </Button>
+      <Button type="primary" style={{border:" 1px solid #BDDEFF"}} onClick={openDrawer}>
+        <ViewTimelineIcon /> Timeline
       </Button>
       <div
         className="task-list-container"
@@ -393,6 +411,12 @@ function TaskList() {
           </Form.Item>
         </Form>
         </Modal>
+
+        <Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
+        <div style={{ width: 400, padding: 16 }}>
+          {/* You can add any content you want inside the drawer */}
+        </div>
+      </Drawer>
     </div>
   );
 }

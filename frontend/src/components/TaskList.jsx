@@ -305,8 +305,6 @@ function TaskList() {
     },
     // Add other columns as needed
   ];
-  
-  
 
   return (
     <div>
@@ -335,7 +333,15 @@ function TaskList() {
           marginTop: "20px",
         }}
       >
-        <div style={{ overflowY: "scroll", width: "100%", height: "600px" }}>
+
+       
+        {taskList.length==0 ? (
+          <div className="body-notask">
+            <img src={BodyNoTask} alt="body-no-task"  style={{height:'300px',width:'300px',marginTop:'100px'}}/>
+            <h4 style={{marginLeft:'60px'}}> No Task Added Yet</h4>
+          </div>
+        ) : (
+        <div style={{ overflowY: "hidden", width: "100%", height: "600px" }}>
           <AntTable
             dataSource={taskList}
             columns={antdColumns}
@@ -351,7 +357,8 @@ function TaskList() {
             scroll={{ y: 600 }} // Set the y property to the desired height
           />
         </div>
-      </div>
+      
+    )}
 
       {/* ADD TASK MODEL */}
       <Modal
@@ -421,12 +428,29 @@ function TaskList() {
         </Form>
       </Modal>
 
+      {/* MUI Timeline Drawer */}
       <Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
-        <div style={{ width: 400, padding: 10 }}>
-            <h2 style={{textAlign:'center'}}>TimeLine</h2>
+        <div style={{ width: 400, padding: 5 }}>
+          <h2 style={{ textAlign: "center" }}>Timeline</h2>
+          <Timeline mode="left" style={{ marginLeft: "-200px" }}>
+            {taskList.map((task) => {
+              const taskDateTime = dayjs(task.datetime);
+              if (taskDateTime.isValid()) {
+                return (
+                  <Timeline.Item
+                    key={task._id}
+                    label={taskDateTime.format("HH:mm")}
+                    style={{ fontSize: "20px" }}
+                  >
+                    {task.title}
+                  </Timeline.Item>
+                );
+              }
+            })}
+          </Timeline>
         </div>
       </Drawer>
-    </div>
+    </div></div>
   );
 }
 

@@ -2,7 +2,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useState,useEffect } from "react";
+import { Modal, Form, Input, Radio, DatePicker } from "antd";
+import PropTypes from "prop-types";
+import { PlusOutlined } from "@ant-design/icons";
+import toast from "react-hot-toast";
 import axios from "axios";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -18,7 +22,6 @@ import {
 } from "@mui/material";
 import "./TaskList.css";
 import BodyNoTask from "../images/boynotask.png";
-import toast from "react-hot-toast";
 import ClearIcon from "@mui/icons-material/Clear";
 import dayjs from "dayjs";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -26,7 +29,6 @@ import TaskModal from "./TaskModal";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Table as AntTable, Tag } from "antd";
 import DoneIcon from "@mui/icons-material/Done";
@@ -74,23 +76,61 @@ function TaskList() {
   const [completedTasks, setCompletedTasks] = useState([]);
   const [reloadTable, setReloadTable] = useState(false);
 
+  // ADD TASK BUTTON STATES
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [taskTitle, setTaskTitle] = useState("");
+  const [selectedColor, setSelectedColor] = useState("l");
+  const [dateTime, setDateTime] = useState(null);
+
   useEffect(() => {
     getTasks();
   }, []);
 
-  const addTaskFun = async (taskData) => {
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  // HANDLE ADD TASK FUNCTION
+  const handleAddTask = async () => {
+    if (taskTitle.trim().length === 0) {
+      toast.error("Task is empty");
+      return;
+    }
+    try {
+      const { data } = await axios.post("/api/tasks", {
+        title: taskTitle,
+        priority: selectedColor,
+        datetime: dateTime ? dateTime.toISOString() : null,
+      });
+
+      toast.success("Task Added successfully");
+
+      setTaskTitle("");
+      setSelectedColor("l");
+      setDateTime(null);
+      setIsModalVisible(false);
+      setTaskList([data, ...taskList]);
+      setNewTask("");
+      getTasks();
+      // window.location.reload();
+    } catch (error) {
+      console.error("Error adding task:", error);
+      throw error;
+    }
+  };
+
+  // ADD TASK PREV FUNCTION 
+  const addTaskFun = async () => {
     // e.preventDefault();
     if (newTask.length <= 0) {
       toast.error("Task is empty");
       return;
     }
-
     try {
-      // Implement your logic to add the task using the taskData
-      console.log("addtaskfun called", taskData);
-      // Make API request or update state as needed
-
-      // Set reloadTable to true to trigger a re-render in TaskList
      
       const formattedDate = dayjs(datetimeval).format("YYYY-MM-DD");
       const formattedTime = dayjs(datetimeval).format("HH:mm:ss.SSS[Z]");
@@ -248,7 +288,7 @@ function TaskList() {
           onClick={() => deleteTask(record._id)}
           disabled={isLoading}
         >
-          Delete
+         <ClearIcon/>
         </Button>
       ),
     },
@@ -257,7 +297,10 @@ function TaskList() {
 
   return (
     <div>
-      <AddButton callAddFun={()=>addTaskFun()} />
+      {/* <AddButton callAddFun={()=>addTaskFun()} /> */}
+      <Button type="primary" style={{border:" 1px solid #BDDEFF"}} onClick={showModal}>
+        <PlusOutlined /> Add Task
+      </Button>
       <div
         className="task-list-container"
         style={{
@@ -285,6 +328,71 @@ function TaskList() {
           />
         </div>
       </div>
+
+      {/* ADD TASK MODEL */}
+      <Modal
+        title="Add New Task"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="add" type="primary" onClick={handleAddTask}>
+            Add Task
+          </Button>,
+        ]}
+      >
+        <Form style={{ display: "flex", flexDirection: "column" }}>
+          <Form.Item label="Task Title" style={{ marginBottom: "20px", flex: 1 }}>
+            <Input
+              value={taskTitle}
+              onChange={(e) => setTaskTitle(e.target.value)}
+              placeholder="What You want ToDo Today"
+            />
+          </Form.Item>
+          <Form.Item label="Priority" style={{ marginBottom: "20px", flex: 1 }}>
+            <Radio.Group
+              value={selectedColor}
+              onChange={(e) => setSelectedColor(e.target.value)}
+              buttonStyle="solid"
+            >
+              <Radio.Button
+                className="custom-radio-button"
+                style={{ background: "#e3f2fd", color: "#1e96fc" }}
+                value="l"
+              >
+                Normal
+              </Radio.Button>
+              <Radio.Button
+                className="custom-radio-button"
+                style={{ background: "#fff2b2", color: "#f48c06" }}
+                value="m"
+              >
+                Important
+              </Radio.Button>
+              <Radio.Button
+                className="custom-radio-button"
+                style={{ background: "#fff0f3", color: "#ff4d6d" }}
+                value="h"
+              >
+                Urgent
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label="Date and Time"
+            style={{ marginBottom: "20px", flex: 1 }}
+          >
+            <DatePicker
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+              value={dateTime}
+              onChange={(date) => setDateTime(date)}
+            />
+          </Form.Item>
+        </Form>
+        </Modal>
     </div>
   );
 }

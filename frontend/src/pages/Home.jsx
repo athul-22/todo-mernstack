@@ -49,7 +49,6 @@ import HistorySidebar from "../components/HistorySidebar";
 import Analysis from "../components/Analysis";
 import AddButton from "../components/AddTask";
 
-
 const BootstrapDialogSettings = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -323,43 +322,49 @@ export default function Home() {
           overflow: "auto",
         }}
       >
-        <Box display="flex" height="100%" >
+        <Box display="flex" height="100%">
           {/* Left Section (35%) */}
-          <Box width="30%" sx={{ overflowY: 'auto' ,}}>
+          <Box width="30%" sx={{ overflowY: "auto" }}>
             <div className="main_outer">
               <div className="top-greetings">
                 Welcome <span className="username">{user.name}</span> 👋 !
               </div>
               <div className="top_today">{todayDate}</div>
             </div>
-            <Analysis/>
+            <Analysis />
           </Box>
 
           {/* Space between sections (5%) */}
-          <Box width="5%" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-  <div
-    style={{
-      borderLeft: '1px solid #a7a7a7',
-      height: '100%',
-      marginLeft: '10px', // Adjust the margin as needed
-    }}
-  />
-</Box>
+          <Box
+            width="5%"
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                borderLeft: "1px solid #a7a7a7",
+                height: "100%",
+                marginLeft: "10px", // Adjust the margin as needed
+              }}
+            />
+          </Box>
 
           {/*🌟 Right Section (60%) */}
           <Box width="60%" backgroundColor="#ffffff">
             <div className="top-right">
               <IconButton color="inherit" onClick={handleOpenAutoAwesome}>
                 <Badge
-                 style={{
-                  height: "40px",
-                  width: "40px",
-                  borderRadius: "10px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  border:'1px solid #7a7a7a',
-                
-                }}
+                  style={{
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "10px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #7a7a7a",
+                  }}
                 >
                   <AutoAwesomeIcon
                     style={{ color: "#7a7a7a", fontSize: "20px" }}
@@ -374,18 +379,16 @@ export default function Home() {
 
               <IconButton color="inherit" onClick={handleHistoryClick}>
                 <Badge
-                 style={{
-                  height: "40px",
-                  width: "40px",
-                  borderRadius: "10px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  border:'1px solid #7a7a7a',
-                
-                  
+                  style={{
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "10px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #7a7a7a",
                   }}
                 >
-                  <RestoreIcon  style={{ color: "#7a7a7a", fontSize: "20px" }}/>
+                  <RestoreIcon style={{ color: "#7a7a7a", fontSize: "20px" }} />
                 </Badge>
               </IconButton>
 
@@ -397,24 +400,20 @@ export default function Home() {
                     borderRadius: "10px",
                     justifyContent: "center",
                     alignItems: "center",
-                    border:'1px solid #7a7a7a',
-                  
-                  
+                    border: "1px solid #7a7a7a",
                   }}
                 >
                   <DragHandleIcon
-                     style={{ color: "#7a7a7a", fontSize: "20px" }}
+                    style={{ color: "#7a7a7a", fontSize: "20px" }}
                   />
                 </Badge>
               </IconButton>
             </div>
-            
-            
-            <div style={{paddingTop:'100px',justifyContent:'center'}}>
-            {/* <AddButton /> */}
-            <TaskList />
-            </div>
 
+            <div style={{ paddingTop: "100px", justifyContent: "center" }}>
+              {/* <AddButton /> */}
+              <TaskList />
+            </div>
           </Box>
         </Box>
       </Box>

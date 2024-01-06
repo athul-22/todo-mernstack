@@ -2,8 +2,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
-import React, { useState,useEffect } from "react";
-import { Modal, Form, Input, Radio, DatePicker } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, Form, Input, Radio, DatePicker, Timeline } from "antd";
 import PropTypes from "prop-types";
 import { PlusOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
@@ -33,8 +33,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Table as AntTable, Tag } from "antd";
 import DoneIcon from "@mui/icons-material/Done";
 import AddButton from "./AddTask";
-import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
-import Drawer from '@mui/material/Drawer';
+import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
+import Drawer from "@mui/material/Drawer";
 
 const getTasks = async () => {
   console.log("Fetching tasks...");
@@ -60,7 +60,7 @@ export const addTaskFun = async (setReloadTable, setNewTask, getTasks) => {
     await getTasks();
     console.log("got it bro");
   } catch (error) {
-    console.error('Error in addTaskFun:', error);
+    console.error("Error in addTaskFun:", error);
   }
 };
 
@@ -84,7 +84,7 @@ function TaskList() {
   const [selectedColor, setSelectedColor] = useState("l");
   const [dateTime, setDateTime] = useState(null);
 
-  // RTIMELINE DRAWER 
+  // RTIMELINE DRAWER
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const openDrawer = () => {
@@ -94,8 +94,6 @@ function TaskList() {
   const closeDrawer = () => {
     setIsDrawerOpen(false);
   };
-
-
 
   useEffect(() => {
     getTasks();
@@ -138,7 +136,7 @@ function TaskList() {
     }
   };
 
-  // ADD TASK PREV FUNCTION 
+  // ADD TASK PREV FUNCTION
   const addTaskFun = async () => {
     // e.preventDefault();
     if (newTask.length <= 0) {
@@ -146,10 +144,9 @@ function TaskList() {
       return;
     }
     try {
-     
       const formattedDate = dayjs(datetimeval).format("YYYY-MM-DD");
       const formattedTime = dayjs(datetimeval).format("HH:mm:ss.SSS[Z]");
-   
+
       const { data } = await axios.post("/api/tasks", {
         title: newTask,
         priority: priority,
@@ -162,7 +159,6 @@ function TaskList() {
       toast.success("Task added successfully");
       setNewTask("");
       getTasks();
-     
     } catch (error) {
       console.log(error);
     }
@@ -303,20 +299,30 @@ function TaskList() {
           onClick={() => deleteTask(record._id)}
           disabled={isLoading}
         >
-         <ClearIcon/>
+          <ClearIcon />
         </Button>
       ),
     },
     // Add other columns as needed
   ];
+  
+  
 
   return (
     <div>
       {/* <AddButton callAddFun={()=>addTaskFun()} /> */}
-      <Button type="primary" style={{border:" 1px solid #BDDEFF",marginRight:'20px'}} onClick={showModal}>
+      <Button
+        type="primary"
+        style={{ border: " 1px solid #BDDEFF", marginRight: "20px" }}
+        onClick={showModal}
+      >
         <PlusOutlined /> Add Task
       </Button>
-      <Button type="primary" style={{border:" 1px solid #BDDEFF"}} onClick={openDrawer}>
+      <Button
+        type="primary"
+        style={{ border: " 1px solid #BDDEFF" }}
+        onClick={openDrawer}
+      >
         <ViewTimelineIcon /> Timeline
       </Button>
       <div
@@ -340,7 +346,7 @@ function TaskList() {
               width: "100%",
               borderRadius: "auto",
               border: "auto black",
-              position: "relative", 
+              position: "relative",
             }}
             scroll={{ y: 600 }} // Set the y property to the desired height
           />
@@ -362,7 +368,10 @@ function TaskList() {
         ]}
       >
         <Form style={{ display: "flex", flexDirection: "column" }}>
-          <Form.Item label="Task Title" style={{ marginBottom: "20px", flex: 1 }}>
+          <Form.Item
+            label="Task Title"
+            style={{ marginBottom: "20px", flex: 1 }}
+          >
             <Input
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
@@ -410,16 +419,15 @@ function TaskList() {
             />
           </Form.Item>
         </Form>
-        </Modal>
+      </Modal>
 
-        <Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
-        <div style={{ width: 400, padding: 16 }}>
-          {/* You can add any content you want inside the drawer */}
+      <Drawer anchor="right" open={isDrawerOpen} onClose={closeDrawer}>
+        <div style={{ width: 400, padding: 10 }}>
+            <h2 style={{textAlign:'center'}}>TimeLine</h2>
         </div>
       </Drawer>
     </div>
   );
 }
-
 
 export default TaskList;
